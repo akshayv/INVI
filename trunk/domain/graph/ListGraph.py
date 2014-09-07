@@ -5,11 +5,16 @@ __author__ = 'akshay'
 
 class ListGraph:
     edges = None
+    numV = 0
 
     def __init__(self, numV):
+        self.numV = numV
         self.edges = []
         for i in range(0, numV):
             self.edges.append([])
+
+    def getConnectedEdges(self, edge):
+        return self.edges[edge]
 
     def getEdge(self, source, dest):
         target = Edge(source, dest, float("inf"))
@@ -40,7 +45,8 @@ class ListGraph:
             string += "\n"
         return string
 
-if __name__ == "__main__":
+
+def getDefaultGraph():
     listGraph = ListGraph(10)
     edge = Edge(0, 1, 5)
     listGraph.insert(edge)
@@ -60,4 +66,11 @@ if __name__ == "__main__":
     listGraph.insert(edge)
     edge = Edge(8, 9, 5)
     listGraph.insert(edge)
+    return listGraph
+
+
+if __name__ == "__main__":
+    listGraph = getDefaultGraph()
     print listGraph
+    print listGraph.getEdge(2, 3)
+    print listGraph.isEdge(2, 4)
