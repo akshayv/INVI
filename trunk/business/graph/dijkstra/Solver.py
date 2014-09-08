@@ -34,7 +34,7 @@ class Solver:
                     u = v
             vMinusS.remove(u)
             for edge in graph.getConnectedEdges(u):
-                v = edge.getDestNodeId()
+                v = edge.getDestNode().getId()
                 if vMinusS.__contains__(v):
                     distance = edge.getDistance()
                     if dist[u] + distance < dist[v]:

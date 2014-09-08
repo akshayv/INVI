@@ -1,4 +1,5 @@
 from domain.graph.Edge import Edge
+from domain.graph.Point import Point
 
 __author__ = 'akshay'
 
@@ -6,6 +7,7 @@ __author__ = 'akshay'
 class ListGraph:
     edges = None
     numV = 0
+    nodeNameIdMap = {}
 
     def __init__(self, numV):
         self.numV = numV
@@ -17,7 +19,7 @@ class ListGraph:
         return self.edges[edge]
 
     def getEdge(self, source, dest):
-        target = Edge(source, dest, float("inf"))
+        target = Edge(Point(source), Point(dest), float("inf"))
         for edge in self.edges[source]:
             if edge.__eq__(target):
                 return edge
@@ -25,16 +27,22 @@ class ListGraph:
 
     def isEdge(self, source, dest):
         edges = self.edges[source]
-        currEdge = Edge(source, dest, 1)
+        currEdge = Edge(Point(source), Point(dest), 1)
         if currEdge in edges:
             return True
         return False
 
     def insert(self, edge):
-        self.edges[edge.getSourceNodeId()].append(edge)
-        self.edges[edge.getDestNodeId()].append(Edge(edge.getDestNodeId(),
-                                                  edge.getSourceNodeId(),
-                                                  edge.getDistance()))
+        if edge.getSourceNode().getName() not in self.nodeNameIdMap:
+            self.nodeNameIdMap[edge.getSourceNode().getName()] = edge.getSourceNode().getId()
+
+        if edge.getDestNode().getName() not in self.nodeNameIdMap:
+            self.nodeNameIdMap[edge.getDestNode().getName()] = edge.getDestNode().getId()
+
+        self.edges[edge.getSourceNode().getId()].append(edge)
+        self.edges[edge.getDestNode().getId()].append(Edge(edge.getDestNode(),
+                                                     edge.getSourceNode(),
+                                                     edge.getDistance()))
 
     def __str__(self):
         string = ""
@@ -48,23 +56,33 @@ class ListGraph:
 
 def getDefaultGraph():
     listGraph = ListGraph(10)
-    edge = Edge(0, 1, 5)
+    point0 = Point(0, 0, 0, "Point0")
+    point1 = Point(1, 0, 0, "Point1")
+    point2 = Point(2, 0, 0, "Point2")
+    point3 = Point(3, 0, 0, "Point3")
+    point4 = Point(4, 0, 0, "Point4")
+    point5 = Point(5, 0, 0, "Point5")
+    point6 = Point(6, 0, 0, "Point6")
+    point7 = Point(7, 0, 0, "Point7")
+    point8 = Point(8, 0, 0, "Point8")
+    point9 = Point(9, 0, 0, "Point9")
+    edge = Edge(point0, point1, 5)
     listGraph.insert(edge)
-    edge = Edge(1, 2, 4)
+    edge = Edge(point1, point2, 4)
     listGraph.insert(edge)
-    edge = Edge(2, 3, 3)
+    edge = Edge(point2, point3, 3)
     listGraph.insert(edge)
-    edge = Edge(2, 4, 2)
+    edge = Edge(point2, point4, 2)
     listGraph.insert(edge)
-    edge = Edge(4, 5, 1)
+    edge = Edge(point4, point5, 1)
     listGraph.insert(edge)
-    edge = Edge(4, 6, 9)
+    edge = Edge(point4, point6, 9)
     listGraph.insert(edge)
-    edge = Edge(4, 7, 2)
+    edge = Edge(point4, point7, 2)
     listGraph.insert(edge)
-    edge = Edge(7, 8, 4)
+    edge = Edge(point7, point8, 4)
     listGraph.insert(edge)
-    edge = Edge(8, 9, 5)
+    edge = Edge(point8, point9, 5)
     listGraph.insert(edge)
     return listGraph
 
