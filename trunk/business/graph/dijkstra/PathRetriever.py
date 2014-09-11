@@ -1,6 +1,7 @@
 from business.graph.dijkstra.Solver import Solver
 from business.graph.parser.GraphParser import GraphParser
 from business.graph.parser import GraphParser as gp
+from integration.http.map.MapRetriever import MapRetriever
 
 __author__ = 'akshay'
 
@@ -29,5 +30,5 @@ class PathRetriever:
         return shortestPath
 
 if __name__ == "__main__":
-    listGraph = GraphParser.parseGraph(gp.getDefaultJson())
+    listGraph = GraphParser.parseGraph(MapRetriever().retrieveData("DemoBuilding", 1))
     print PathRetriever.getShortestPath(listGraph, "Entrance", "TO level 2")
