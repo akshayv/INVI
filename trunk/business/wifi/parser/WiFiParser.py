@@ -1,4 +1,5 @@
 from integration.http.map.MapRetriever import MapRetriever
+from integration.terminal.CommandExecutor import CommandExecutor
 import subprocess
 import tempfile
 
@@ -14,7 +15,7 @@ class WiFiParser:
         # change this to iwlist scan
         command = ['/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport','-sNUS']
 
-        output = subprocess.Popen(command, stdout=subprocess.PIPE).communicate()[0]
+        output = CommandExecutor().executeCommand(command)
         print output
 
 if __name__ == "__main__":
