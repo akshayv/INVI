@@ -9,25 +9,43 @@ class StepCounter:
     __deltaH = 3.5
     __lastReadingTime = None
     __lastReading = None
+    __lastDir = 1
 
-    @staticmethod
-    def isStep(accelerometerReading, currentTime):
+    def isStep(self, accelerometerReading, currentTime):
         isStep = False
-        if StepCounter.__lastReadingTime is not None and currentTime - StepCounter.__lastReadingTime <= 100:
-            if abs(StepCounter.__lastReading - accelerometerReading.z) > StepCounter.__deltaH:
-                isStep = True
-                StepCounter.__numSteps += 1
+        if self.__lastReadingTime is not None and currentTime - self.__lastReadingTime > 100:
+            self.__lastReading = accelerometerReading.z
+            self.__lastReadingTime = currentTime
+            self.__lastDir = 1
 
-        StepCounter.__lastReadingTime = currentTime
-        StepCounter.__lastReading = accelerometerReading.z
+        # We define a step as peak in acc. followed by a valley.
+        # This block corresponds to if it is a peak.
+        if self.__lastDir == 1:
+            if self.__lastReading is None or accelerometerReading.z > self.__lastReading:
+                self.__lastReadingTime = currentTime
+                self.__lastReading = accelerometerReading.z
+            elif self.__lastReading - accelerometerReading.z > self.__deltaH:
+                self.__numSteps += 1
+                isStep = True
+                self.__lastDir = 0
+                self.__lastReading = accelerometerReading.z
+        # This blocks corresponds to if it is a valley
+        elif self.__lastDir == 0:
+            if self.__lastReading is None or accelerometerReading.z < self.__lastReading:
+                self.__lastReadingTime = currentTime
+                self.__lastReading = accelerometerReading.z
+            # If it was a valley but is rising and the difference if > deltaH,
+            # we do not count it as a step
+            elif accelerometerReading.z - self.__lastReading > self.__deltaH:
+                self.__lastDir = 1
+                self.__lastReading = accelerometerReading.z
+
         return isStep
 
-    @staticmethod
-    def getSteps():
-        return StepCounter.__numSteps
+    def getSteps(self):
+        return self.__numSteps
 
-    @staticmethod
-    def reset():
-        StepCounter.__numSteps = 0
-        StepCounter.__lastReading = None
-        StepCounter.__lastReadingTime = None
+    def reset(self):
+        self.__numSteps = 0
+        self.__lastReading = None
+        self.__lastReadingTime = None
