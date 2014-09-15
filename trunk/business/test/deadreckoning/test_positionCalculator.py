@@ -1,6 +1,5 @@
 from unittest import TestCase
 from business.deadreckoning.PositionCalculator import PositionCalculator
-from business.deadreckoning.StepCounter import StepCounter
 from domain.deadreckoning.AccelerometerReading import AccelerometerReading
 
 __author__ = 'akshay'

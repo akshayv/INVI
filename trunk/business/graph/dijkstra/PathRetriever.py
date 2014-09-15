@@ -1,6 +1,4 @@
 from business.graph.dijkstra.DijkstraSolver import DijkstraSolver
-from business.graph.parser.GraphParser import GraphParser
-from integration.http.map.MapRetriever import MapRetriever
 
 __author__ = 'akshay'
 
@@ -8,7 +6,7 @@ class PathRetriever:
 
     @staticmethod
     def getShortestPath(graph, sourceNodeName, destNodeName):
-        if sourceNodeName not in graph.nodeNameIdMap or destNodeName not in graph.nodeNameIdMap :
+        if sourceNodeName not in graph.nodeNameIdMap or destNodeName not in graph.nodeNameIdMap:
             raise Exception("No such source node or destination node. Please fix this")
         sourceNodeId = graph.nodeNameIdMap[sourceNodeName]
         destNodeId = graph.nodeNameIdMap[destNodeName]

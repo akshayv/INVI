@@ -1,5 +1,3 @@
-from domain.deadreckoning.AccelerometerReading import AccelerometerReading
-
 __author__ = 'akshay'
 
 
