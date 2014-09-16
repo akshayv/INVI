@@ -14,5 +14,5 @@ class SerialQueueListener:
     def listen():
         while True:
             message = SerialQueueListener.queue.get(True)
-            SerialQueueListener.queue.task_done()
             SerialQueueListener.positionCalculator.updatePosition(message)
+            SerialQueueListener.queue.task_done()
