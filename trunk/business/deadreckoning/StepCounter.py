@@ -2,55 +2,55 @@ __author__ = 'akshay'
 
 
 class StepCounter(object):
-    _numSteps = 0
+    __numSteps = 0
 
-    _deltaH = 3.5
-    _lastReadingTime = None
-    _lastReading = None
-    _lastDir = 1
-    _instance = None
+    __deltaH = 3.5
+    __lastReadingTime = None
+    __lastReading = None
+    __lastDir = 1
+    __instance = None
 
     def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super(StepCounter, cls).__new__(
+        if not cls.__instance:
+            cls.__instance = super(StepCounter, cls).__new__(
                 cls, *args, **kwargs)
-        return cls._instance
+        return cls.__instance
 
     def isStep(self, accelerometerReading, currentTime):
         isStep = False
-        if self._lastReadingTime is not None and currentTime - self._lastReadingTime > 100:
-            self._lastReading = accelerometerReading.z
-            self._lastReadingTime = currentTime
-            self._lastDir = 1
+        if self.__lastReadingTime is not None and currentTime - self.__lastReadingTime > 100:
+            self.__lastReading = accelerometerReading.z
+            self.__lastReadingTime = currentTime
+            self.__lastDir = 1
 
         # We define a step as peak in acc. followed by a valley.
         # This block corresponds to if it is a peak.
-        if self._lastDir == 1:
-            if self._lastReading is None or accelerometerReading.z > self._lastReading:
-                self._lastReadingTime = currentTime
-                self._lastReading = accelerometerReading.z
-            elif self._lastReading - accelerometerReading.z > self._deltaH:
-                self._numSteps += 1
+        if self.__lastDir == 1:
+            if self.__lastReading is None or accelerometerReading.z > self.__lastReading:
+                self.__lastReadingTime = currentTime
+                self.__lastReading = accelerometerReading.z
+            elif self.__lastReading - accelerometerReading.z > self.__deltaH:
+                self.__numSteps += 1
                 isStep = True
-                self._lastDir = 0
-                self._lastReading = accelerometerReading.z
+                self.__lastDir = 0
+                self.__lastReading = accelerometerReading.z
         # This blocks corresponds to if it is a valley
-        elif self._lastDir == 0:
-            if self._lastReading is None or accelerometerReading.z < self._lastReading:
-                self._lastReadingTime = currentTime
-                self._lastReading = accelerometerReading.z
+        elif self.__lastDir == 0:
+            if self.__lastReading is None or accelerometerReading.z < self.__lastReading:
+                self.__lastReadingTime = currentTime
+                self.__lastReading = accelerometerReading.z
             # If it was a valley but is rising and the difference if > deltaH,
             # we do not count it as a step
-            elif accelerometerReading.z - self._lastReading > self._deltaH:
-                self._lastDir = 1
-                self._lastReading = accelerometerReading.z
+            elif accelerometerReading.z - self.__lastReading > self.__deltaH:
+                self.__lastDir = 1
+                self.__lastReading = accelerometerReading.z
 
         return isStep
 
     def getSteps(self):
-        return self._numSteps
+        return self.__numSteps
 
     def reset(self):
-        self._numSteps = 0
-        self._lastReading = None
-        self._lastReadingTime = None
+        self.__numSteps = 0
+        self.__lastReading = None
+        self.__lastReadingTime = None
