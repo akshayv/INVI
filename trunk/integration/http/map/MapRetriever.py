@@ -17,6 +17,6 @@ class MapRetriever:
 
 if __name__ == "__main__":
     mapRetriever = MapRetriever()
-    jsonData = mapRetriever.retrieveData("DemoBuilding", 1)
+    jsonData = mapRetriever.retrieveData("DemoBuilding", 1)["map"]
     for doc in jsonData:
         print doc
