@@ -1,6 +1,10 @@
 from threading import Thread
-from time import sleep
 from SerialQueueListener import SerialQueueListener
+from business.deadreckoning.PositionCalculator import PositionCalculator
+from business.deadreckoning.StepCounter import StepCounter
+from domain.deadreckoning.AccelerometerReading import AccelerometerReading
+from domain.deadreckoning.SensorReading import SensorReading
+
 __author__ = 'akshay'
 
 
@@ -13,21 +17,23 @@ class SerialCommApi:
 
 if __name__ == '__main__':
     api = SerialCommApi()
+    positionCalculator = PositionCalculator(0, 0, 0)
     for i in range(1):
         t = Thread(target=SerialQueueListener.listen)
         t.daemon = True
         t.start()
-    sleep(5)
+
+    SerialQueueListener.queue.put(SensorReading(AccelerometerReading(0, 0, 0), 0, 0))
+    timeOffset = 100
     for i in range(50):
-        if i % 3 == 0:
-            SerialQueueListener.queue.put("Hello!")
-            print "Put Hello!"
-        if i % 3 == 1:
-            SerialQueueListener.queue.put("Here!")
-            print "Put Here!"
-        if i % 3 == 2:
-            SerialQueueListener.queue.put("I am!")
-            print "Put I am!"
+        if i % 2 == 0:
+            SerialQueueListener.queue.put(SensorReading(AccelerometerReading(0, 0, 13), 0, timeOffset))
+        elif i % 2 == 1:
+            SerialQueueListener.queue.put(SensorReading(AccelerometerReading(0, 0, 6), 0, timeOffset))
+        timeOffset += 100
 
     SerialQueueListener.queue.join()
 
+    print StepCounter().getSteps()
+    print positionCalculator.getX()
+    print positionCalculator.getY()

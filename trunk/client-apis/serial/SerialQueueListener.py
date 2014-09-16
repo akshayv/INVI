@@ -7,7 +7,8 @@ __author__ = 'akshay'
 class SerialQueueListener:
     queue = Queue(maxsize=0)
 
-    positionCalculator = PositionCalculator.getInstance()
+    # Assume at this point another positionCalculator has been initialized and that instance will be returned
+    positionCalculator = PositionCalculator(None, None, None)
 
     @staticmethod
     def listen():
