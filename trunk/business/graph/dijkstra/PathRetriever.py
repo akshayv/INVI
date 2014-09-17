@@ -1,7 +1,4 @@
-from business.graph.dijkstra.Solver import Solver
-from business.graph.parser.GraphParser import GraphParser
-from business.graph.parser import GraphParser as gp
-from integration.http.map.MapRetriever import MapRetriever
+from business.graph.dijkstra.DijkstraSolver import DijkstraSolver
 
 __author__ = 'akshay'
 
@@ -9,7 +6,7 @@ class PathRetriever:
 
     @staticmethod
     def getShortestPath(graph, sourceNodeName, destNodeName):
-        if sourceNodeName not in graph.nodeNameIdMap or destNodeName not in graph.nodeNameIdMap :
+        if sourceNodeName not in graph.nodeNameIdMap or destNodeName not in graph.nodeNameIdMap:
             raise Exception("No such source node or destination node. Please fix this")
         sourceNodeId = graph.nodeNameIdMap[sourceNodeName]
         destNodeId = graph.nodeNameIdMap[destNodeName]
@@ -17,7 +14,7 @@ class PathRetriever:
         parent = [None] * graph.numV
         distance = [None] * graph.numV
 
-        Solver.solveGraph(graph, sourceNodeId, parent, distance)
+        DijkstraSolver.solveGraph(graph, sourceNodeId, parent, distance)
 
         shortestPath = [destNodeId]
 
@@ -28,7 +25,3 @@ class PathRetriever:
 
         shortestPath.reverse()
         return shortestPath
-
-if __name__ == "__main__":
-    listGraph = GraphParser.parseGraph(MapRetriever().retrieveData("DemoBuilding", 1))
-    print PathRetriever.getShortestPath(listGraph, "Entrance", "TO level 2")
