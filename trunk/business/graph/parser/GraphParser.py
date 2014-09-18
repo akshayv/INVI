@@ -14,7 +14,7 @@ class GraphParser:
         listGraph = ListGraph(len(graphJson))
         for point in graphJson:
             pointObject = Point(int(point["nodeId"]) - 1, float(point["x"]), float(point["y"]), point["nodeName"])
-            for linkedPointId in point["linkTo"].split(", "):
+            for linkedPointId in point["linkTo"].split(","):
                 # Map from 1-9 to 0-8
                 modifiedLinkedPointId = int(linkedPointId) - 1
                 linkedPoint = graphJson[modifiedLinkedPointId]
