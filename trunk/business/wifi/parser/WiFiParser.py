@@ -22,6 +22,17 @@ class WiFiParser:
         distance = 10**((A - strength)/(10*n))
         return distance
 
+    @staticmethod
+    def calculateLocation(coord_a, coord_b, coord_c):
+        # solve equations to return a range of points
+        x, y, z = S('x y z'.split())
+        equations = [
+            Eq((x - coord_a['x'])**2 + (y - coord_a['y'])**2 + (z - coord_a['z'])**2, coord_a['distance']**3),
+            Eq((x - coord_b['x'])**2 + (y - coord_b['y'])**2 + (z - coord_b['z'])**2, coord_b['distance']**2),
+            Eq((x - coord_c['x'])**2 + (y - coord_c['y'])**2 + (z - coord_c['z'])**2, coord_c['distance']**2)
+        ]
+        print solve(equations, [x, y, z])
+        # print x, y
 
 if __name__ == "__main__":
     wifiParser = WiFiParser()
