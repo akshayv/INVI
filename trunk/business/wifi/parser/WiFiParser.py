@@ -17,9 +17,11 @@ class WiFiParser:
 
 if __name__ == "__main__":
     wifiParser = WiFiParser()
-    # wifiJson = MapRetriever().retrieveData("DemoBuilding", 1)
-    # accessPoints = wifiParser.obtainWiFiAccessPoints(wifiJson)
-    wifiStrength = wifiParser.obtainWiFiStrength("NUS")
-    print type(wifiStrength)
-    # print accessPoints
-    print wifiStrength
+    wifiJson = MapRetriever().retrieveData("DemoBuilding", 1)
+    accessPoints = wifiParser.obtainWiFiAccessPoints(wifiJson)
+    # for ap in accessPoints:
+    wifi = ""
+    for ap in ["NUS"]:
+        wifi = wifiParser.obtainWiFiStrength(ap)
+    wifiParser.calculateLocation({ "x": 2, "y": 0, "z": 0, "distance": 2 },
+        { "x": 0, "y": 2, "z": 0, "distance": 2 }, { "x": -2, "y": 0, "z": 0, "distance": 2 })
