@@ -7,7 +7,10 @@ class WiFiParser:
     @staticmethod
     def obtainWiFiAccessPoints(wifiJson):
         accessPoints = wifiJson["wifi"]
-        return accessPoints
+        ssidList = []
+        for item in accessPoints:
+            ssidList.append(item["nodeName"].encode("ascii", "ignore"))
+        return ssidList
 
     @staticmethod
     def obtainWiFiStrength(ssid):
