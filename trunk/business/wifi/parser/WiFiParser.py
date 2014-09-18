@@ -14,6 +14,14 @@ class WiFiParser:
         command = ['/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport','-s'+ssid]
         output = CommandExecutor().executeCommand(command)
         return output
+    @staticmethod
+    def calculateDistanceFromStrength(strength):
+        # obtain distance from strength
+        A = -10 # Received signal in dBm at 1 metre - need to calibrate this - setting it at -10 for now
+        n = 2.7 # Path loss component - Ranges from 2.7 to 4.3
+        distance = 10**((A - strength)/(10*n))
+        return distance
+
 
 if __name__ == "__main__":
     wifiParser = WiFiParser()
