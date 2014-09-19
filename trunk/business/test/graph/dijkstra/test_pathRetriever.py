@@ -8,5 +8,5 @@ __author__ = 'akshay'
 
 class TestPathRetriever(TestCase):
     def test_getShortestPath(self):
-        listGraph = GraphParser.parseGraph(MapRetriever().retrieveData("DemoBuilding", 1))
-        self.assertEqual(str(PathRetriever.getShortestPath(listGraph, "Entrance", "TO level 2")), '[0, 1, 2, 3, 5, 6]')
+        listGraph = GraphParser.parseGraph(MapRetriever().retrieveData("COM1", 2))
+        self.assertEqual(str(PathRetriever.getShortestPath(listGraph, "Linkway", "Seminar Room 2")), '[2, 1, 3, 4, 7, 8]')

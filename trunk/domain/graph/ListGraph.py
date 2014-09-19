@@ -8,6 +8,7 @@ class ListGraph:
     edges = None
     numV = 0
     nodeNameIdMap = {}
+    pointsIdMap = {}
 
     def __init__(self, numV):
         self.numV = numV
@@ -35,9 +36,11 @@ class ListGraph:
     def insert(self, edge):
         if edge.getSourceNode().getName() not in self.nodeNameIdMap:
             self.nodeNameIdMap[edge.getSourceNode().getName()] = edge.getSourceNode().getId()
+            self.pointsIdMap[edge.getSourceNode().getId()] = edge.getSourceNode()
 
         if edge.getDestNode().getName() not in self.nodeNameIdMap:
             self.nodeNameIdMap[edge.getDestNode().getName()] = edge.getDestNode().getId()
+            self.pointsIdMap[edge.getDestNode().getId()] = edge.getDestNode()
 
         self.edges[edge.getSourceNode().getId()].append(edge)
         self.edges[edge.getDestNode().getId()].append(Edge(edge.getDestNode(),

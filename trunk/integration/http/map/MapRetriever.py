@@ -10,9 +10,11 @@ class MapRetriever:
     BUILDING_PARAMETER = "&Building="
     LEVEL_PARAMETER = "&Level="
 
-    def retrieveData(self, building, level):
+    @staticmethod
+    def retrieveData(building, level):
         return json.loads(urllib2.urlopen(
-            self.DATA_END_POINT + self.BUILDING_PARAMETER + str(building) + self.LEVEL_PARAMETER + str(level)).read())
+            MapRetriever.DATA_END_POINT + MapRetriever.BUILDING_PARAMETER + str(
+                building) + MapRetriever.LEVEL_PARAMETER + str(level)).read())
 
 
 if __name__ == "__main__":
