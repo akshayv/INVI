@@ -22,7 +22,7 @@ class DijkstraSolver:
             dist[v] = graph.getEdge(start, v).getDistance()
 
         while len(vMinusS) != 0:
-            #TODO: Have a Priority Queue implementation
+            #TODO: Based on real data decide to have a Priority Queue implementation
             minDist = float("inf")
             u = -1
             for v in vMinusS:
