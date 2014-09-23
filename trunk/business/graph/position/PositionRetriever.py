@@ -18,8 +18,11 @@ class PositionRetriever:
         EarphonesApi.outputText("Please specify Level")
         level = MicrophoneApi.getUserInput()
 
+        EarphonesApi.outputText("Retrieving graph now.")
         graphCache = GraphCache()
         floorGraph = graphCache.getGraph(building, level)
+        if len(floorGraph.edges) == 0:
+            raise Exception("Looks like there is no such location. Try again")
 
         EarphonesApi.outputText("Please specify Location Name")
         location = "Semilar Rom 11"
