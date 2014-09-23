@@ -4,12 +4,11 @@ from integration.terminal.CommandExecutor import CommandExecutor
 
 __author__ = 'raghav'
 
+
 class LocationCalculator:
-    def computeTopThreeStrengths(self, wifiData):
-        """Select top 3 strengths for trilateration"""
-        strengthList = []
-        sort(strengthList)
-        return strengthList
+    def computeTopThreeStrengths(self, apInfo):
+        topThree = sorted(apInfo, key=lambda k: k['ssid'], reverse=True)[:3]
+        return topThree
 
     def computeDistanceFromSSID(self, strength):
         # obtain distance from strength
