@@ -10,8 +10,9 @@ class GraphParser:
 
     @staticmethod
     def parseGraph(graphJson):
+        northAt = float(graphJson["info"]["northAt"])
         graphJson = graphJson["map"]
-        listGraph = ListGraph(len(graphJson))
+        listGraph = ListGraph(len(graphJson), northAt)
         for point in graphJson:
             pointObject = Point(int(point["nodeId"]) - 1, float(point["x"]), float(point["y"]), point["nodeName"])
             for linkedPointId in point["linkTo"].split(","):
