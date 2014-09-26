@@ -1,5 +1,3 @@
-from time import sleep
-
 __author__ = 'akshay'
 
 import pyttsx
@@ -19,4 +17,3 @@ if __name__ == "__main__":
     while True:
         earphonesApi = EarphonesApi()
         earphonesApi.outputText("Go right in 3 meters!")
-        # earphonesApi.outputText("What's up")

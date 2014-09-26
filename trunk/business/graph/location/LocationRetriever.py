@@ -7,10 +7,10 @@ from integration.microphone.MicrophoneApi import MicrophoneApi
 __author__ = 'akshay'
 
 
-class PositionRetriever:
+class LocationRetriever:
 
     @staticmethod
-    def getPosition():
+    def getLocation():
 
         EarphonesApi.outputText("Please specify Building Name")
         building = MicrophoneApi.getUserInput()
@@ -34,15 +34,15 @@ class PositionRetriever:
 
 
     @staticmethod
-    def getInitialPosition():
+    def getInitialLocation():
         EarphonesApi.outputText("Please specify initial position")
-        return PositionRetriever.getPosition()
+        return LocationRetriever.getLocation()
 
     @staticmethod
     def getDestination():
         EarphonesApi.outputText("Please specify destination")
-        return PositionRetriever.getPosition()
+        return LocationRetriever.getLocation()
 
 
 if __name__ == "__main__":
-    PositionRetriever.getInitialPosition()
+    LocationRetriever.getInitialLocation()
