@@ -16,5 +16,5 @@ class SerialCommApi:
     def run():
         while True:
             # TODO: iter = api.poll
-            SerialCommApi.onSerialMessage(SensorReading(AccelerometerReading(0, 0 ,0), 100, 100))
+            SerialCommApi.onSerialMessage(SensorReading(AccelerometerReading(0, 0, 0), 100, 100))
             time.sleep(0.1)

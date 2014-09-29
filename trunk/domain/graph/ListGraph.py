@@ -58,6 +58,9 @@ class ListGraph:
             string += "\n"
         return string
 
+    def getNodes(self):
+        return self.pointsIdMap.values()
+
 
 def getDefaultGraph():
     listGraph = ListGraph(10, 0)
@@ -97,3 +100,4 @@ if __name__ == "__main__":
     print listGraph
     print listGraph.getEdge(2, 3)
     print listGraph.isEdge(2, 4)
+    print listGraph.getNodes()

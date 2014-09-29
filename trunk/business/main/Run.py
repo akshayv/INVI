@@ -56,7 +56,7 @@ destination = getDestination()
 graphCache = GraphCache()
 floorGraph = graphCache.getGraph(initialPosition.getBuilding(), initialPosition.getLevel())
 
-shortestPathNodes = getShortestPath()
+shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(), destination.getName())
 
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
