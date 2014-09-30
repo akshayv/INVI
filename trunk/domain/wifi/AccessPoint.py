@@ -41,7 +41,7 @@ class AccessPoint:
 
     @staticmethod
     def checkIfBSSIDIsSame(bssid1, bssid2):
-        if bssid1 == bssid2:
+        if bssid1[:-2] == bssid2[:-2]:
             return True
         else:
             return False
