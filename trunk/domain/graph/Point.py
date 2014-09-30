@@ -26,5 +26,20 @@ class Point:
         return self.__name
 
     def __str__(self):
-        return "( nodeId = " + str(self.getId()) +  ", x = " + str(self.getX()) + ", y = " + str(self.getY()) \
+        return "( nodeId = " + str(self.getId()) + ", x = " + str(self.getX()) + ", y = " + str(self.getY()) \
                + ", name = " + str(self.getName()) + " )"
+
+    def __repr__(self):
+        return self.__str__()
+
+    @staticmethod
+    def fromString(stringPoint):
+        stringPoint = stringPoint.replace(" )", "")
+        stringPoint = stringPoint.replace("( ", "")
+        array = stringPoint.split(", ")
+        return Point(int(array[0].replace("nodeId = ", "")), float(array[1].replace("x = ", "")),
+                     float(array[2].replace("y = ", "")), array[3].replace("name = ", ""))
+
+
+if __name__ == "__main__":
+    print Point.fromString("( nodeId = 26, x = 5220.0, y = 1600.0, name = Seminar Room 11 )")

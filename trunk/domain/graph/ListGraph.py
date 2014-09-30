@@ -9,9 +9,11 @@ class ListGraph:
     numV = 0
     nodeNameIdMap = {}
     pointsIdMap = {}
+    northAt = 0
 
-    def __init__(self, numV):
+    def __init__(self, numV, northAt):
         self.numV = numV
+        self.northAt = northAt
         self.edges = []
         for i in range(0, numV):
             self.edges.append([])
@@ -56,9 +58,12 @@ class ListGraph:
             string += "\n"
         return string
 
+    def getNodes(self):
+        return self.pointsIdMap.values()
+
 
 def getDefaultGraph():
-    listGraph = ListGraph(10)
+    listGraph = ListGraph(10, 0)
     point0 = Point(0, 0, 0, "Point0")
     point1 = Point(1, 0, 0, "Point1")
     point2 = Point(2, 0, 0, "Point2")
@@ -95,3 +100,4 @@ if __name__ == "__main__":
     print listGraph
     print listGraph.getEdge(2, 3)
     print listGraph.isEdge(2, 4)
+    print listGraph.getNodes()
