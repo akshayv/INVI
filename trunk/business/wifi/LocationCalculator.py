@@ -38,7 +38,6 @@ if __name__ == "__main__":
         for map in mapAP:
             if access_point.checkIfBSSIDIsSame(nap['bssid'], map['bssid']):
                 filteredAP.append(nap)
-
     # print filteredAP
 
     topThree = location_calculator.computeTopThreeRSSI(filteredAP)
@@ -49,7 +48,6 @@ if __name__ == "__main__":
     # print topBssidList
 
     mapBssidList = access_point.getMapAccessPointsBSSIDs()
-    # print "top 3 bssids:", topBssidList
     # for b in mapBssidList:
     #     print "map bssids:", b['bssid']
 
@@ -64,9 +62,9 @@ if __name__ == "__main__":
             if AccessPoint.checkIfBSSIDIsSame(bssid['bssid'], b['bssid']):
                 # coordinates.append({"bssid")
                 coordList.append({ "nodeName": b["nodeName"], "bssid": b["bssid"], "nodeId": b["nodeId"], "rssi": bssid["rssi"] })
-    print coordList
-    print location_calculator.computeDistanceFromRSSI(-50)
     # print coordList
+    print location_calculator.computeDistanceFromRSSI(-39)
+
     for item in coordList:
         item["distance"] = location_calculator.computeDistanceFromRSSI(item["rssi"])
         coordinate = access_point.getCoordinate(item["nodeId"])
@@ -74,7 +72,5 @@ if __name__ == "__main__":
         item["y"] = coordinate["y"]
 
     # print coordList
-    print location_calculator.computeLocation(coordList)
-
+    # print location_calculator.computeLocation(coordList)
     # print location_calculator.computeLocation([{'x': 0, "y": 2, "distance": 2}, {"x": 2, "y": 0, "distance": 2}, {"x": -2, "y": 0, "distance": 2}])
-
