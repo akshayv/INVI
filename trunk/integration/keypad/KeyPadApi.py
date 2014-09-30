@@ -8,8 +8,8 @@ import RPi.GPIO as GPIO
 
 class KeyPadApi:
 
-    GPIO.setMode(GPIO.BOARD)
-    MATRIX = [[1, 2, 3],
+    GPIO.setmode(GPIO.BOARD)
+    KEYPAD = [[1, 2, 3],
               [4, 5, 6],
               [7, 8, 9],
               ['*', 0, '#']]
@@ -19,7 +19,7 @@ class KeyPadApi:
 
     @staticmethod
     def getKey():
-                # Set all columns as output low
+                 # Set all columns as output low
         for j in range(len(KeyPadApi.COLUMN)):
             GPIO.setup(KeyPadApi.COLUMN[j], GPIO.OUT)
             GPIO.output(KeyPadApi.COLUMN[j], GPIO.LOW)
@@ -31,7 +31,8 @@ class KeyPadApi:
         # Scan rows for pushed key/button
         # A valid key press should set "rowVal"  between 0 and 3.
         rowVal = -1
-        while 0 > rowVal > 3:
+        #print rowVal
+        while 0 > rowVal or rowVal > 3:
             for i in range(len(KeyPadApi.ROW)):
                 tmpRead = GPIO.input(KeyPadApi.ROW[i])
                 if tmpRead == 0:
@@ -48,13 +49,15 @@ class KeyPadApi:
         # Scan columns for still-pushed key/button
         # A valid key press should set "colVal"  between 0 and 2.
         colVal = -1
-        while 0 > colVal > 3:
+        while 0 > colVal or rowVal > 2:
             for j in range(len(KeyPadApi.COLUMN)):
                 tmpRead = GPIO.input(KeyPadApi.COLUMN[j])
                 if tmpRead == 1:
                     colVal=j
 
+        time.sleep(0.1)
         return KeyPadApi.KEYPAD[rowVal][colVal]
+
 
     @staticmethod
     def getLevel():
