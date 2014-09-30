@@ -5,8 +5,8 @@ __author__ = 'raghav'
 
 
 class LocationCalculator:
-    def computeTopThreeStrengths(self, apInfo):
-        topThree = sorted(apInfo, key=lambda k: k['ssid'], reverse=True)[:3]
+    def computeTopThreeRSSI(self, apInfo):
+        topThree = sorted(apInfo, key=lambda k: k['rssi'])[:3]
         return topThree
 
     def computeDistanceFromSSID(self, ssid):
