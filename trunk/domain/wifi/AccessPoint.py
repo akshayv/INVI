@@ -58,9 +58,12 @@ class AccessPoint:
             return False
 
 if __name__ == "__main__":
-    print AccessPoint().getMapAccessPoints()
-    print AccessPoint().getMapAccessPointsCoordinates()
-    print AccessPoint().getMapAccessPointsBSSIDs()
-    print AccessPoint().checkIfBSSIDIsSame("hello", "hello")
-    print AccessPoint().getNearbyAccessPoints()
+    access_point = AccessPoint()
+    print "getMapAccessPoints: ", access_point.getMapAccessPoints()
+    # print "getMapAccessPointsCoordinates: ", access_point.getMapAccessPointsCoordinates()
+    # print "getMapAccessPointsBSSIDs: ", access_point.getMapAccessPointsBSSIDs()
+    # print "checkIfBSSIDIsSame: ", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:DD:5E:AA:22:5B")
+    # print "getNearbyAccessPoints: ", access_point.getNearbyAccessPoints()
+    print access_point.filterRepeatingAccessPoints(access_point.getNearbyAccessPoints())
+
 
