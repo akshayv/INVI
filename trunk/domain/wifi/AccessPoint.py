@@ -36,8 +36,19 @@ class AccessPoint:
         accessPoints = self.getMapAccessPoints()
         accessPointsBSSIDs = []
         for apc in accessPoints:
-            accessPointsBSSIDs.append({ "bssid": apc["macAddr"], "nodeName": apc["nodeName"] })
+            accessPointsBSSIDs.append({ "bssid": apc["macAddr"], "nodeName": apc["nodeName"], "nodeId": apc["nodeId"] })
         return accessPointsBSSIDs
+
+    def getCoordinate(self, nodeId):
+        accessPoints = self.getMapAccessPoints()
+        coordinate = {}
+        for ap in accessPoints:
+            if ap['nodeId'] == nodeId:
+                coordinate["nodeId"] = nodeId
+                coordinate["x"] = ap["x"]
+                coordinate["y"] = ap["y"]
+        return coordinate
+
 
     @staticmethod
     def checkIfBSSIDIsSame(bssid1, bssid2):
