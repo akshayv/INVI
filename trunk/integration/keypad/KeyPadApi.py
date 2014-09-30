@@ -7,49 +7,67 @@ import RPi.GPIO as GPIO
 
 
 class KeyPadApi:
+
+    GPIO.setMode(GPIO.BOARD)
+    MATRIX = [[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9],
+              ['*', 0, '#']]
+    #GPIO PINS
+    ROW = [19, 15, 13, 11]
+    COLUMN = [12, 16, 18]
+
     @staticmethod
-    def setup():
-        global MATRIX, ROW, COL, j
-        MATRIX = [[1, 2, 3, 'A'],
-                  [4, 5, 6, 'B'],
-                  [7, 8, 9, 'C'],
-                  ['*', 0, '#', 'D']]
-        #GPIO PINS
-        ROW = [7, 11, 13, 15]
-        COL = [12, 16, 18, 22]
-        GPIO.setMode(GPIO.BOARD)
-        for j in range(4):
-            GPIO.setup(COL[j], GPIO.OUT)
-            GPIO.output(COL[j], 1)
-        for j in range(4):
-            GPIO.setup(ROW[j], GPIO.IN, pull_up_down=GPIO.PUT_UP)
+    def getKey():
+                # Set all columns as output low
+        for j in range(len(KeyPadApi.COLUMN)):
+            GPIO.setup(KeyPadApi.COLUMN[j], GPIO.OUT)
+            GPIO.output(KeyPadApi.COLUMN[j], GPIO.LOW)
+
+        # Set all rows as input
+        for i in range(len(KeyPadApi.ROW)):
+            GPIO.setup(KeyPadApi.ROW[i], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+        # Scan rows for pushed key/button
+        # A valid key press should set "rowVal"  between 0 and 3.
+        rowVal = -1
+        while 0 > rowVal > 3:
+            for i in range(len(KeyPadApi.ROW)):
+                tmpRead = GPIO.input(KeyPadApi.ROW[i])
+                if tmpRead == 0:
+                    rowVal = i
+
+        # Convert columns to input
+        for j in range(len(KeyPadApi.COLUMN)):
+                GPIO.setup(KeyPadApi.COLUMN[j], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+        # Switch the i-th row found from scan to output
+        GPIO.setup(KeyPadApi.ROW[rowVal], GPIO.OUT)
+        GPIO.output(KeyPadApi.ROW[rowVal], GPIO.HIGH)
+
+        # Scan columns for still-pushed key/button
+        # A valid key press should set "colVal"  between 0 and 2.
+        colVal = -1
+        while 0 > colVal > 3:
+            for j in range(len(KeyPadApi.COLUMN)):
+                tmpRead = GPIO.input(KeyPadApi.COLUMN[j])
+                if tmpRead == 1:
+                    colVal=j
+
+        return KeyPadApi.KEYPAD[rowVal][colVal]
 
     @staticmethod
     def getLevel():
-        KeyPadApi.setup()
         levelStr = ""
+        key = ''
         EarphonesApi.outputText("Please enter the level followed by a hash")
-        try:
-            while True:
-                for j in range(4):
-                    GPIO.output(COL[j], 0)
-                    for i in range(4):
-                        if GPIO.input(ROW[i]) == 0:
-                            if MATRIX[i][j] != '#':
-                                levelStr += str(MATRIX[i][j])
-                            else:
-                                GPIO.cleanup()
-                                return int(levelStr)
-
-                            while GPIO.input(ROW[i]) == 0:
-                                pass
-        except KeyboardInterrupt:
-            GPIO.cleanup()
+        while key is not '#':
+            key = KeyPadApi.getKey()
+            levelStr += str(key)
+        return int(levelStr)
 
     @staticmethod
     def getLocation(possibleLocations):
-        KeyPadApi.setup()
-        num = ""
         EarphonesApi.outputText(
             "The locations will now be specified to you with a number. Please enter the corresponding number when we ask for it")
         locNum = {}
@@ -60,44 +78,22 @@ class KeyPadApi:
             locNum[i] = possibleLocations.getName()
 
         EarphonesApi.outputText("Please enter the number followed by hash")
-        try:
-            while True:
-                for j in range(4):
-                    GPIO.output(COL[j], 0)
-                    for i in range(4):
-                        if GPIO.input(ROW[i]) == 0:
-                            if MATRIX[i][j] != '#':
-                                num += str(MATRIX[i][j])
-                            else:
-                                GPIO.cleanup()
-                                return locNum[num]
-
-                            while GPIO.input(ROW[i]) == 0:
-                                pass
-        except KeyboardInterrupt:
-            GPIO.cleanup()
+        num = ""
+        key = ''
+        while key is not '#':
+            key = KeyPadApi.getKey()
+            num += str(key)
+        return locNum[int(num)]
 
     @staticmethod
     def getConfirmation():
-        KeyPadApi.setup()
         EarphonesApi.outputText(
             "To confirm press 1")
-        try:
-            while True:
-                for j in range(4):
-                    GPIO.output(COL[j], 0)
-                    for i in range(4):
-                        if GPIO.input(ROW[i]) == 0:
-                            if MATRIX[i][j] == 1:
-                                return True
-                            else:
-                                return False
-        except KeyboardInterrupt:
-            GPIO.cleanup()
+        key = KeyPadApi.getKey()
+        return key == '1'
 
     @staticmethod
     def getBuilding():
-        KeyPadApi.setup()
         num = ""
         locations = ["COM1", "COM2"]
         EarphonesApi.outputText(
@@ -108,26 +104,17 @@ class KeyPadApi:
             EarphonesApi.outputText(locations)
             time.sleep(0.2)
             locNum[i] = locations
-        EarphonesApi.outputText("Please enter the building followed by a hash")
-        try:
-            while True:
-                for j in range(4):
-                    GPIO.output(COL[j], 0)
-                    for i in range(4):
-                        if GPIO.input(ROW[i]) == 0:
-                            if MATRIX[i][j] != '#':
-                                num += str(MATRIX[i][j])
-                            else:
-                                GPIO.cleanup()
-                                return locNum[num]
-
-                            while GPIO.input(ROW[i]) == 0:
-                                pass
-        except KeyboardInterrupt:
-            GPIO.cleanup()
+        EarphonesApi.outputText("Please enter the building number followed by a hash")
+        num = ""
+        key = ''
+        while key is not '#':
+            key = KeyPadApi.getKey()
+            num += str(key)
+        return locNum[int(num)]
 
 
-
+if __name__ == "__main__":
+    print KeyPadApi.getKey()
 
 
 
