@@ -15,14 +15,16 @@ class LocationCalculator:
         distance = 10**((A - int(rssi))/(10*n))
         return distance
 
-    def computeLocation(self, coord_a, coord_b, coord_c):
-        x, y, z = S('x y z'.split())
+    def computeLocation(self, coordList):
+        x, y = S('x y'.split())
+        # x_a = (float(coordList[0]['x'].encode("ascii", "ignore")))
+        # y_a = (float(coordList[0]['y'].encode("ascii", "ignore")))
         equations = [
-            Eq((x - coord_a['x'])**2 + (y - coord_a['y'])**2 + (z - coord_a['z'])**2, coord_a['distance']**3),
-            Eq((x - coord_b['x'])**2 + (y - coord_b['y'])**2 + (z - coord_b['z'])**2, coord_b['distance']**2),
-            Eq((x - coord_c['x'])**2 + (y - coord_c['y'])**2 + (z - coord_c['z'])**2, coord_c['distance']**2)
+            Eq((x - (float(coordList[0]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[0]['y'].encode("ascii", "ignore"))))**2, float(coordList[0]['distance'])**2),
+            Eq((x - (float(coordList[1]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[1]['y'].encode("ascii", "ignore"))))**2, float(coordList[1]['distance'])**2),
+            Eq((x - (float(coordList[2]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[2]['y'].encode("ascii", "ignore"))))**2, float(coordList[2]['distance'])**2)
         ]
-        return solve(equations, [x, y, z])
+        return solve(equations, [x, y])
 
 
 if __name__ == "__main__":
