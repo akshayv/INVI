@@ -29,7 +29,7 @@ class AccessPoint:
             output.pop(-1) # Check for exception
             for networkInfo in output:
                 networkInfo = networkInfo.lstrip().rstrip().split(" ")
-                ap_info.append({ "bssid": networkInfo[1], "ssid": networkInfo[2] })
+                ap_info.append({ "bssid": networkInfo[1], "rssi": networkInfo[2] })
             ap_info.pop(0) # Check for exception
             # Filter similar APs
             ap_info = self.filterRepeatingAccessPoints(ap_info)
@@ -38,7 +38,7 @@ class AccessPoint:
         return ap_info
 
     def getMapAccessPoints(self):
-        wifiJson = MapRetriever().retrieveData("DemoBuilding", 1)
+        wifiJson = MapRetriever().retrieveData("COM1", 2)
         accessPoints = wifiJson["wifi"]
         # for item in accessPoints:
         #     ssidList.append(item["nodeName"].encode("ascii", "ignore"))
