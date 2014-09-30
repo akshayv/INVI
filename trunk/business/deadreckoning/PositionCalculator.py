@@ -52,6 +52,6 @@ class PositionCalculator(object):
             relativeTheta = radians(90 - (self.__northAt + sensorReading.compassReading) % 360) % 360
             self.__curX += self.__strideLength * cos(relativeTheta)
             self.__curY += self.__strideLength * sin(relativeTheta)
-            self.directionSpecifier.next()
+            self.directionSpecifier.next(self.__curX, self.__curY, self.__curDirection, self.__northAt)
 
         self.__curDirection = sensorReading.compassReading
