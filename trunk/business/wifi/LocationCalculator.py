@@ -10,8 +10,9 @@ class LocationCalculator:
         return topThree
 
     def computeDistanceFromRSSI(self, rssi):
-        A = -10 # Received signal in dBm at 1 metre - need to calibrate this - setting it at -10 for now
-        n = 2.7 # Path loss component - Ranges from 2.7 to 4.3
+        """http://electronics.stackexchange.com/questions/83354/calculate-distance-from-rssi"""
+        A = -20 # Received signal in dBm at 1 metre - need to calibrate this - setting it at -10 for now
+        n = 3.5 # Path loss component - Ranges from 2.7 to 4.3
         distance = 10**((A - int(rssi))/(10*n))
         return distance
 
