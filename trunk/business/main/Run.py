@@ -61,10 +61,12 @@ shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPositi
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
 
-nextSteps = DirectionSpecifier(shortestPathNodes)
+nextSteps = DirectionSpecifier()
+nextSteps.setLocationQueue(shortestPathNodes)
 print nextSteps.locationQueue
 
-nextSteps.next()
+EarphonesApi.outputText("Please take a step forward")
+
 
 t = Thread(target=SerialQueueListener.listen)
 t.daemon = True

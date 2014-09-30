@@ -22,7 +22,10 @@ class DirectionSpecifier(object):
                 cls, *args, **kwargs)
         return cls.__instance
 
-    def __init__(self, locationQueue):
+    def __init__(self):
+        pass
+
+    def setLocationQueue(self, locationQueue):
         self.locationQueue = locationQueue
         if len(locationQueue) is not 0:
             self.nextLocation = locationQueue[0]

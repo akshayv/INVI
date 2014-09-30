@@ -14,7 +14,7 @@ class PositionCalculator(object):
     __strideLength = 1.0
     stepCounter = StepCounter()
     __instance = None
-    directionSpecifier = DirectionSpecifier(None)
+    directionSpecifier = DirectionSpecifier()
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
