@@ -49,13 +49,14 @@ class KeyPadApi:
         # Scan columns for still-pushed key/button
         # A valid key press should set "colVal"  between 0 and 2.
         colVal = -1
-        while 0 > colVal or rowVal > 2:
+        while 0 > colVal or colVal > 2:
             for j in range(len(KeyPadApi.COLUMN)):
                 tmpRead = GPIO.input(KeyPadApi.COLUMN[j])
                 if tmpRead == 1:
                     colVal=j
 
-        time.sleep(0.1)
+        time.sleep(0.5)
+	print KeyPadApi.KEYPAD[rowVal][colVal]
         return KeyPadApi.KEYPAD[rowVal][colVal]
 
 
@@ -64,10 +65,13 @@ class KeyPadApi:
         levelStr = ""
         key = ''
         EarphonesApi.outputText("Please enter the level followed by a hash")
-        while key is not '#':
+        while True:
             key = KeyPadApi.getKey()
-            levelStr += str(key)
-        return int(levelStr)
+            if key is not '#':
+		levelStr += str(key)
+	    else:
+		break
+        return levelStr
 
     @staticmethod
     def getLocation(possibleLocations):
@@ -76,16 +80,19 @@ class KeyPadApi:
         locNum = {}
         for i in range(len(possibleLocations)):
             EarphonesApi.outputText(i)
-            EarphonesApi.outputText(possibleLocations.getName())
+            EarphonesApi.outputText(possibleLocations[i].getName())
             time.sleep(0.2)
-            locNum[i] = possibleLocations.getName()
+            locNum[i] = possibleLocations[i]
 
         EarphonesApi.outputText("Please enter the number followed by hash")
         num = ""
         key = ''
-        while key is not '#':
+        while True:
             key = KeyPadApi.getKey()
-            num += str(key)
+	    if key is not '#':
+            	num += str(key)
+	    else:
+		break
         return locNum[int(num)]
 
     @staticmethod
@@ -93,7 +100,7 @@ class KeyPadApi:
         EarphonesApi.outputText(
             "To confirm press 1")
         key = KeyPadApi.getKey()
-        return key == '1'
+        return key == 1
 
     @staticmethod
     def getBuilding():
@@ -104,16 +111,21 @@ class KeyPadApi:
         locNum = {}
         for i in range(len(locations)):
             EarphonesApi.outputText(i)
-            EarphonesApi.outputText(locations)
+            EarphonesApi.outputText(locations[i])
             time.sleep(0.2)
-            locNum[i] = locations
+            locNum[i] = locations[i]
         EarphonesApi.outputText("Please enter the building number followed by a hash")
         num = ""
         key = ''
-        while key is not '#':
+        while True:
             key = KeyPadApi.getKey()
-            num += str(key)
-        return locNum[int(num)]
+	    if key is not '#':
+            	num += str(key)
+	    else:
+		break
+	if int(num) > len(locations) - 1:
+	    raise Exception("No such option")
+	return locNum[int(num)]
 
 
 if __name__ == "__main__":
