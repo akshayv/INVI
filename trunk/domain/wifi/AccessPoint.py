@@ -4,18 +4,37 @@ from integration.terminal.Platform import Platform
 
 __author__ = 'raghav'
 
+
 class AccessPoint:
+    def filterRepeatingAccessPoints(self, ap_info):
+        toBeRemoved = []
+        # print ap_info
+        for ap1 in ap_info:
+            for ap2 in ap_info:
+                if ap1['bssid'] != ap2['bssid']:
+                    if self.checkIfBSSIDIsSame(ap1['bssid'], ap2['bssid']):
+                        ap = ap1 if int(ap1['rssi']) < int(ap2['rssi']) else ap2
+                        toBeRemoved.append(ap)
+        # print len(toBeRemoved)
+        # print len(ap_info)
+        ap_info = [x for x in ap_info if x not in toBeRemoved]
+        # print len(ap_info)
+        return ap_info
+
     def getNearbyAccessPoints(self):
-        # TODO: asynchronous polling
         ap_info = []
         if Platform().getOS() == "OS X":
             command = ['/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport', '-sNUS']
-            output = CommandExecutor().executeCommand(command).split('\n')
+            output = CommandExecutor().executeCommandWithOutput(command).split('\n')
             output.pop(-1) # Check for exception
             for networkInfo in output:
                 networkInfo = networkInfo.lstrip().rstrip().split(" ")
                 ap_info.append({ "bssid": networkInfo[1], "ssid": networkInfo[2] })
             ap_info.pop(0) # Check for exception
+            # Filter similar APs
+            ap_info = self.filterRepeatingAccessPoints(ap_info)
+        elif Platform().getOS() == "Linux":
+            pass
         return ap_info
 
     def getMapAccessPoints(self):
