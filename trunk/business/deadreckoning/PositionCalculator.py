@@ -1,4 +1,5 @@
 from math import cos, sin, radians
+from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.StepCounter import StepCounter
 from domain.deadreckoning.SensorReading import SensorReading
 
@@ -13,6 +14,7 @@ class PositionCalculator(object):
     __strideLength = 1.0
     stepCounter = StepCounter()
     __instance = None
+    directionSpecifier = DirectionSpecifier(None)
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
@@ -50,4 +52,6 @@ class PositionCalculator(object):
             relativeTheta = radians(90 - (self.__northAt + sensorReading.compassReading) % 360) % 360
             self.__curX += self.__strideLength * cos(relativeTheta)
             self.__curY += self.__strideLength * sin(relativeTheta)
+            self.directionSpecifier.next()
+
         self.__curDirection = sensorReading.compassReading

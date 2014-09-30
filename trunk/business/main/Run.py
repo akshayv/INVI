@@ -64,6 +64,8 @@ positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.
 nextSteps = DirectionSpecifier(shortestPathNodes)
 print nextSteps.locationQueue
 
+nextSteps.next()
+
 t = Thread(target=SerialQueueListener.listen)
 t.daemon = True
 t.start()
