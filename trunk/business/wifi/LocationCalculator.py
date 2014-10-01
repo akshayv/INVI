@@ -1,4 +1,4 @@
-from sympy import *
+from sympy import Eq, Line, Point, S, solve
 from domain.wifi.AccessPoint import AccessPoint
 
 __author__ = 'raghav'

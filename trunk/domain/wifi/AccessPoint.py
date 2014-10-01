@@ -42,19 +42,6 @@ class AccessPoint:
         accessPoints = wifiJson["wifi"]
         return accessPoints
 
-    def getMapAccessPointsCoordinates(self):
-        accessPoints = self.getMapAccessPoints()
-        accessPointsCoordinates = []
-        for apc in accessPoints:
-            accessPointsCoordinates.append({ "x": apc["x"], "y": apc["y"], "bssid": apc["macAddr"] })
-        return accessPointsCoordinates
-
-    def getMapAccessPointsBSSIDs(self):
-        accessPoints = self.getMapAccessPoints()
-        accessPointsBSSIDs = []
-        for apc in accessPoints:
-            accessPointsBSSIDs.append({ "bssid": apc["macAddr"], "nodeName": apc["nodeName"], "nodeId": apc["nodeId"] })
-        return accessPointsBSSIDs
     def getCoordinate(self, building, level, nodeId):
         accessPoints = self.getMapAccessPoints(building, level)
         coordinate = {}
