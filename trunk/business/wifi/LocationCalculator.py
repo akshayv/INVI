@@ -33,45 +33,23 @@ if __name__ == "__main__":
     access_point = AccessPoint()
 
     nearbyAP = access_point.getNearbyAccessPoints()
-    mapAP = access_point.getMapAccessPointsCoordinates()
+    mapAP = access_point.getMapAccessPoints("COM1", 2)
     filteredAP = []
     for nap in nearbyAP:
         for map in mapAP:
-            if access_point.checkIfBSSIDIsSame(nap['bssid'], map['bssid']):
+            if access_point.checkIfBSSIDIsSame(nap['bssid'], map['macAddr']):
+                nap["nodeName"] = map["nodeName"]
+                nap["bssid"] = map["macAddr"]
+                nap["nodeId"] = map["nodeId"]
                 filteredAP.append(nap)
-    # print filteredAP
 
-    topThree = location_calculator.computeTopThreeRSSI(filteredAP)
-    # print topThree
-    topBssidList = []
-    for ap in topThree:
-        topBssidList.append(ap['bssid'])
-    # print topBssidList
+    topAPs = location_calculator.computeTopThreeRSSI(filteredAP)
 
-    mapBssidList = access_point.getMapAccessPointsBSSIDs()
-    # for b in mapBssidList:
-    #     print "map bssids:", b['bssid']
-
-    coordList = []
-    # print topThree
-    # print mapBssidList
-
-
-    for bssid in topThree:
-        for b in mapBssidList:
-            # print b['bssid']
-            if AccessPoint.checkIfBSSIDIsSame(bssid['bssid'], b['bssid']):
-                # coordinates.append({"bssid")
-                coordList.append({ "nodeName": b["nodeName"], "bssid": b["bssid"], "nodeId": b["nodeId"], "rssi": bssid["rssi"] })
-    # print coordList
-    print location_calculator.computeDistanceFromRSSI(-39)
-
-    for item in coordList:
-        item["distance"] = location_calculator.computeDistanceFromRSSI(item["rssi"])
-        coordinate = access_point.getCoordinate(item["nodeId"])
-        item["x"] = coordinate["x"]
-        item["y"] = coordinate["y"]
-
-    # print coordList
-    # print location_calculator.computeLocation(coordList)
-    # print location_calculator.computeLocation([{'x': 0, "y": 2, "distance": 2}, {"x": 2, "y": 0, "distance": 2}, {"x": -2, "y": 0, "distance": 2}])
+    # Compute location only if there are at least 2 strong rssi
+    if len(topAPs) >= 2:
+        for item in topAPs:
+            item["distance"] = location_calculator.computeDistanceFromRSSI(item["rssi"]) * 100
+            coordinate = access_point.getCoordinate("COM1", 2, item["nodeId"])
+            item["x"] = coordinate["x"]
+            item["y"] = coordinate["y"]
+        print location_calculator.computeLocation(topAPs)
