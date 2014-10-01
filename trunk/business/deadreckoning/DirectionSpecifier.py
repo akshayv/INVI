@@ -14,6 +14,11 @@ class DirectionSpecifier(object):
     LEFT = "left"
     RIGHT = "right"
 
+    STRAIGHT_LEFT = "straight-left"
+    STRAIGHT_RIGHT = "straight-right"
+    BACK_LEFT = "back-left"
+    BACK_RIGHT = "back-right"
+
     __instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -30,21 +35,32 @@ class DirectionSpecifier(object):
         if len(locationQueue) is not 0:
             self.nextLocation = locationQueue[0]
 
-    def getNextDirection(self, curX, curY, curDir, northAt):
+    def getNextHeading(self, curDir, curX, curY, northAt):
         dirInAngle = degrees(atan2((self.nextLocation.getY() - curY), (
             self.nextLocation.getX() - curX)))
         bearing = (90 - dirInAngle) % 360
         adjustedBearing = (bearing + 360 - northAt) % 360
-
         delta = (adjustedBearing - curDir) % 360
-        if 0 < delta <= 45 or 360 > delta > 315:
+        return delta
+
+    def getNextDirection(self, curX, curY, curDir, northAt):
+        delta = self.getNextHeading(curDir, curX, curY, northAt)
+        if 0 < delta <= 22 or 360 > delta > 338:
             return DirectionSpecifier.UP
-        elif 45 < delta <= 135:
+        elif 22 < delta <= 67:
+            return DirectionSpecifier.STRAIGHT_RIGHT
+        elif 67 < delta <= 112:
             return DirectionSpecifier.RIGHT
-        elif 135 < delta <= 225:
+        elif 112 < delta <= 158:
+            return DirectionSpecifier.BACK_RIGHT
+        if 158 < delta <= 202:
             return DirectionSpecifier.DOWN
-        elif 225 < delta <= 315:
+        elif 202 < delta <= 247:
+            return DirectionSpecifier.BACK_LEFT
+        elif 247 < delta <= 292:
             return DirectionSpecifier.LEFT
+        elif 292 < delta <= 338:
+            return DirectionSpecifier.STRAIGHT_LEFT
 
     def next(self, curX, curY, curDir, northAt):
         if abs(curX - self.nextLocation.getX()) < 3.0 and abs(
@@ -63,5 +79,6 @@ if __name__ == "__main__":
                  Point.fromString("( nodeId = 27, x = 5220.0, y = 620.0, name = P28 )"),
                  Point.fromString("( nodeId = 25, x = 5220.0, y = 360.0, name = P26 )"),
                  Point.fromString("( nodeId = 21, x = 4800.0, y = 360.0, name = P22 )")]
-    directionSpecifier = DirectionSpecifier(locations)
+    directionSpecifier = DirectionSpecifier()
+    directionSpecifier.setLocationQueue(locations)
     directionSpecifier.next(5220.0, 1600.0, 120, 180)
