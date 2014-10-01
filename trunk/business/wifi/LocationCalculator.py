@@ -18,14 +18,51 @@ class LocationCalculator:
 
     def computeLocation(self, coordList):
         x, y = S('x y'.split())
-        # x_a = (float(coordList[0]['x'].encode("ascii", "ignore")))
-        # y_a = (float(coordList[0]['y'].encode("ascii", "ignore")))
+        print coordList
+        x_a = float(str(coordList[0]['x']))
+        x_b = float(str(coordList[1]['x']))
+        y_a = float(str(coordList[0]['y']))
+        y_b = float(str(coordList[1]['y']))
+
+        if len(coordList) > 2:
+            x_c = float(str(coordList[2]['x']))
+            y_c = float(str(coordList[2]['y']))
+
+        print x_a, y_a, float(coordList[0]['distance'])
+        print x_b, y_b, float(coordList[1]['distance'])
+
+        # Solve intersection of 2 circles
         equations = [
-            Eq((x - (float(coordList[0]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[0]['y'].encode("ascii", "ignore"))))**2, float(coordList[0]['distance'])**2),
-            Eq((x - (float(coordList[1]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[1]['y'].encode("ascii", "ignore"))))**2, float(coordList[1]['distance'])**2),
-            Eq((x - (float(coordList[2]['x'].encode("ascii", "ignore"))))**2 + (y - (float(coordList[2]['y'].encode("ascii", "ignore"))))**2, float(coordList[2]['distance'])**2)
+            Eq((x - x_a)**2 + (y - y_a)**2, float(coordList[0]['distance'])**2),
+            Eq((x - x_b)**2 + (y - y_b)**2, float(coordList[1]['distance'])**2)
         ]
-        return solve(equations, [x, y])
+
+        p1, p2 = solve(equations)
+        point1 = Point(p1[x], p1[y])
+        point2 = Point(p2[x], p2[y])
+
+        # Find equation of line joining circle intersections
+        l = Line(point1, point2)
+        c = l.coefficients
+
+        # If 3 strong points, compute trilateration, else average two points
+        if len(coordList) > 2:
+            a, b = solve([
+                Eq((x - x_c)**2 + (y - y_c)**2, float(coordList[2]['distance'])**2),
+                c[0]*x + c[1]*y + c[2]
+            ])
+
+            ret = b
+            try:
+                if (((a[x] <= p1[x] and a[y] <= p2[y]) and (a[x] >= p2[x] and a[y] >= p2[y])) or
+                        ((a[x] >= p1[x] and a[y] >= p2[y]) and (a[x] <= p2[x] and a[y] <= p2[y]))):
+                    ret = a
+            except TypeError:
+                pass
+            return ret
+        else:
+            ret = {x: (p1[x] + p2[x]) / 2, y: (p1[y] + p2[y]) / 2}
+            return ret
 
 
 if __name__ == "__main__":
