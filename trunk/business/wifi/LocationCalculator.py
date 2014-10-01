@@ -7,7 +7,11 @@ __author__ = 'raghav'
 class LocationCalculator:
     def computeTopThreeRSSI(self, apInfo):
         topThree = sorted(apInfo, key=lambda k: k['rssi'])[:3]
-        return topThree
+        topThreeFiltered = []
+        for i in range(len(topThree)):
+            if int(topThree[i]['rssi']) > -60:
+                topThreeFiltered.append(topThree[i])
+        return topThreeFiltered
 
     def computeDistanceFromRSSI(self, rssi):
         """http://electronics.stackexchange.com/questions/83354/calculate-distance-from-rssi"""
