@@ -4,6 +4,7 @@ from business.deadreckoning.PositionCalculator import PositionCalculator
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
+from business.wifi.WiFiPoller import WiFiPoller
 from clientapis.serial.SerialCommApi import SerialCommApi
 from integration.earphones.EarphonesApi import EarphonesApi
 
@@ -72,9 +73,10 @@ t = Thread(target=SerialQueueListener.listen)
 t.daemon = True
 t.start()
 
-# wifiThread = Thread(target=Wifi.poll)
-# wifiThread.daemon = True
-# wifiThread.start()
+wifiThread = Thread(target=WiFiPoller.poll)
+wifiThread.daemon = True
+wifiThread.start()
+
 
 t = Thread(target=SerialCommApi.run)
 t.start()
