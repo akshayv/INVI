@@ -22,7 +22,7 @@ class AccessPoint:
         if Platform().getOS() == "OS X":
             command = ['/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport', '-sNUS']
             output = CommandExecutor().executeCommandWithOutput(command).split('\n')
-
+            # Check if WiFi is switched on
             # Parse terminal output
             output.pop(-1) # Check for exception
             for networkInfo in output:
@@ -62,8 +62,8 @@ class AccessPoint:
 
 if __name__ == "__main__":
     access_point = AccessPoint()
-    # print "getMapAccessPoints:", access_point.getMapAccessPoints("COM1", 2)
-    # print "checkIfBSSIDIsSame:", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:DD:5E:AA:22:5B")
-    # print "getNearbyAccessPoints:", access_point.getNearbyAccessPoints()
-    # print "filterRepeatingAccessPoints:", access_point.filterRepeatingAccessPoints(access_point.getNearbyAccessPoints())
+    print "getMapAccessPoints:", access_point.getMapAccessPoints("COM1", 2)
+    print "checkIfBSSIDIsSame:", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:DD:5E:AA:22:5B")
+    print "getNearbyAccessPoints:", access_point.getNearbyAccessPoints()
+    print "filterRepeatingAccessPoints:", access_point.filterRepeatingAccessPoints(access_point.getNearbyAccessPoints())
 
