@@ -4,9 +4,9 @@ from domain.wifi.AccessPoint import AccessPoint
 __author__ = 'raghav'
 
 
-class LocationCalculator:
+class WiFiLocationCalculator:
     def computeTopThreeRSSI(self, apInfo):
-        topThree = sorted(apInfo, key=lambda k: k['rssi'])[:3]
+        topThree = sorted(apInfo, key=lambda k: k['rssi'], reverse=True)[:3]
         topThreeFiltered = []
         for i in range(len(topThree)):
             if int(topThree[i]['rssi']) > -60:
@@ -22,7 +22,7 @@ class LocationCalculator:
 
     def computeLocation(self, coordList):
         x, y = S('x y'.split())
-        print coordList
+        # print coordList
         x_a = float(str(coordList[0]['x']))
         x_b = float(str(coordList[1]['x']))
         y_a = float(str(coordList[0]['y']))
@@ -32,8 +32,8 @@ class LocationCalculator:
             x_c = float(str(coordList[2]['x']))
             y_c = float(str(coordList[2]['y']))
 
-        print x_a, y_a, float(coordList[0]['distance'])
-        print x_b, y_b, float(coordList[1]['distance'])
+        # print x_a, y_a, float(coordList[0]['distance'])
+        # print x_b, y_b, float(coordList[1]['distance'])
 
         # Solve intersection of 2 circles
         equations = [
@@ -68,15 +68,31 @@ class LocationCalculator:
             ret = {x: (p1[x] + p2[x]) / 2, y: (p1[y] + p2[y]) / 2}
             return ret
 
-
 if __name__ == "__main__":
-    location_calculator = LocationCalculator()
+    location_calculator = WiFiLocationCalculator()
     access_point = AccessPoint()
 
-    nearbyAP = access_point.getNearbyAccessPoints()
+    # nearbyAP = access_point.getNearbyAccessPoints()
+    nearbyAP_1 = [
+        { "bssid": 'e8:ba:70:61:c9:60', "rssi": -30 },
+        { "bssid": 'e8:ba:70:61:af:20', "rssi": -20 },
+        { "bssid": '04:da:d2:74:cf:30', "rssi": -33 }
+    ]
+
+    nearbyAP_2 = [
+        { "bssid": 'e8:ba:70:61:c9:60', "rssi": -30 },
+        { "bssid": 'e8:ba:70:61:af:20', "rssi": -20 },
+        { "bssid": '04:da:d2:74:cf:30', "rssi": -63 }
+    ]
+
+    nearbyAP_3 = [
+        { "bssid": 'e8:ba:70:61:c9:60', "rssi": -30 }
+        # { "bssid": 'e8:ba:70:61:af:20', "rssi": -20 },
+        # { "bssid": '04:da:d2:74:cf:30', "rssi": -33 }
+    ]
     mapAP = access_point.getMapAccessPoints("COM1", 2)
     filteredAP = []
-    for nap in nearbyAP:
+    for nap in nearbyAP_3:
         for map in mapAP:
             if access_point.checkIfBSSIDIsSame(nap['bssid'], map['macAddr']):
                 nap["nodeName"] = map["nodeName"]
@@ -94,3 +110,5 @@ if __name__ == "__main__":
             item["x"] = coordinate["x"]
             item["y"] = coordinate["y"]
         print location_calculator.computeLocation(topAPs)
+    else:
+        print "Unable to correct location due to weak WiFi signals"
