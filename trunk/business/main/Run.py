@@ -5,8 +5,9 @@ from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
 from business.wifi.WiFiPoller import WiFiPoller
-from clientapis.serial.SerialCommApi import SerialCommApi
+from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 from integration.earphones.EarphonesApi import EarphonesApi
+from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
 
 __author__ = 'akshay'
 
@@ -48,9 +49,21 @@ def getDestination():
 def initialMessage():
     EarphonesApi.outputText("System is online.")
 
+def performHandshake():
+    EarphonesApi.outputText("Performing handshake now.")
+    isHandShakeSuccessful = False
+    while not isHandShakeSuccessful:
+        integrationSerial.sendMessage(1)
+        message = clientSerial.getMessage()
+        if message is '1':
+            integrationSerial.sendMessage(1)
+            isHandShakeSuccessful = True
+
+
 #This is where the execution begins
 
 initialMessage()
+performHandshake()
 initialPosition = getInitialPosition()
 destination = getDestination()
 
@@ -78,5 +91,5 @@ wifiThread.daemon = True
 wifiThread.start()
 
 
-t = Thread(target=SerialCommApi.run)
+t = Thread(target=clientSerial.run)
 t.start()
