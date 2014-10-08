@@ -10,8 +10,8 @@ __author__ = 'akshay'
 class SerialCommApi:
 
     DELIMITER = '12'
-    serial = serial.Serial('/dev/AMA0', 9600, timeout=1)
-
+    serial = serial.Serial('/dev/ttyAMA0', 9600, timeout=None)
+    serial.open()
     @staticmethod
     def onSerialMessage(item):
         SerialQueueListener.queue.put(item)
@@ -29,4 +29,4 @@ class SerialCommApi:
 
     @classmethod
     def getMessage(cls):
-        return SerialCommApi.serial.read()
+        return SerialCommApi.serial.readline().replace("\n", "").strip()

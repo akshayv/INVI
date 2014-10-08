@@ -51,12 +51,16 @@ def initialMessage():
 
 def performHandshake():
     EarphonesApi.outputText("Performing handshake now.")
+    print "Performing handshake"
     isHandShakeSuccessful = False
     while not isHandShakeSuccessful:
-        integrationSerial.sendMessage(1)
+        integrationSerial.sendMessage('1')
+	print "Sent"
         message = clientSerial.getMessage()
-        if message is '1':
-            integrationSerial.sendMessage(1)
+	print "Incoming message was:" + str(message)
+        if message == '1':
+            print "Send and receive successful"
+            integrationSerial.sendMessage('1')
             isHandShakeSuccessful = True
 
 
