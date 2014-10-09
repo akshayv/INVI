@@ -49,7 +49,8 @@ class PositionCalculator(object):
             raise Exception("Data in is not sensor reading")
 
         if self.stepCounter.isStep(sensorReading.accelerometerReading, sensorReading.currentTime) is True:
-            relativeTheta = radians(90 - (self.__northAt + sensorReading.compassReading) % 360) % 360
+            print "Step was taken"
+	    relativeTheta = radians(90 - (self.__northAt + sensorReading.compassReading) % 360) % 360
             self.__curX += self.__strideLength * cos(relativeTheta)
             self.__curY += self.__strideLength * sin(relativeTheta)
             self.directionSpecifier.next(self.__curX, self.__curY, self.__curDirection, self.__northAt)
