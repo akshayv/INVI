@@ -20,8 +20,8 @@ class WiFiPoller:
                 print "Hang on while we recompute your location"
             sleep(5)
 
-
-    def checkLocation(self):
+    @staticmethod
+    def checkLocation():
         location_calculator = WiFiLocationCalculator()
         access_point = AccessPoint()
 

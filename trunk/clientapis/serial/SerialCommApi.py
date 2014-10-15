@@ -9,7 +9,6 @@ __author__ = 'akshay'
 
 class SerialCommApi:
 
-    DELIMITER = '12'
     serial = serial.Serial('/dev/ttyAMA0', 9600, timeout=None)
     serial.open()
     @staticmethod
@@ -18,15 +17,17 @@ class SerialCommApi:
 
     @staticmethod
     def run():
-        message = ""
         while True:
-            bit = SerialCommApi.serial.read()
-            if bit != SerialCommApi.DELIMITER:
-                message += bit
-            else:
-                SerialCommApi.onSerialMessage(SensorReading.fromString(message))
-                time.sleep(0.1)
+            try:
+                inp = SerialCommApi.serial.readline()
+	        print inp
+                SerialCommApi.onSerialMessage(SensorReading.fromString(inp))
+            except Exception:
+		print "ERROR DATA"
 
     @classmethod
     def getMessage(cls):
         return SerialCommApi.serial.readline().replace("\n", "").strip()
+
+if __name__ == "__main__":
+	SerialCommApi.run()
