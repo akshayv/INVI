@@ -11,9 +11,13 @@ class PositionCalculator(object):
     __curY = None
     __curDirection = None
     __northAt = None
-    __strideLength = 1.0
     stepCounter = StepCounter()
     __instance = None
+
+    __K_constant = 0.2
+    __lastStepTime = None
+    __lastStepDir = None
+
     directionSpecifier = DirectionSpecifier()
 
     def __new__(cls, *args, **kwargs):
@@ -48,11 +52,18 @@ class PositionCalculator(object):
         if not isinstance(sensorReading, SensorReading):
             raise Exception("Data in is not sensor reading")
 
+        if self.__lastStepTime is not None and sensorReading.currentTime > self.__lastStepTime + 50:
+            relativeTheta = radians(90 - (self.__northAt + self.__lastStepDir) % 360) % 360
+            lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
+            # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
+            strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
+            self.__curX += strideLength * cos(relativeTheta)
+            self.__curY += strideLength * sin(relativeTheta)
+            self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir, self.__northAt)
+            self.__lastStepTime = None
+
         if self.stepCounter.isStep(sensorReading.accelerometerReading, sensorReading.currentTime) is True:
             print "Step was taken"
-	    relativeTheta = radians(90 - (self.__northAt + sensorReading.compassReading) % 360) % 360
-            self.__curX += self.__strideLength * cos(relativeTheta)
-            self.__curY += self.__strideLength * sin(relativeTheta)
-            self.directionSpecifier.next(self.__curX, self.__curY, self.__curDirection, self.__northAt)
-
+            self.__lastStepDir = sensorReading.compassReading
+            self.__lastStepTime = sensorReading.currentTime
         self.__curDirection = sensorReading.compassReading
