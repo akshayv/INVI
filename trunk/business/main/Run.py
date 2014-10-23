@@ -2,11 +2,8 @@ import time
 from business.cache.GraphCache import GraphCache
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.PositionCalculator import PositionCalculator
-from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
-from business.wifi.WiFiPoller import WiFiPoller
-from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
 import urllib2
@@ -59,13 +56,14 @@ def getDestination():
 def initialMessage():
     EarphonesApi.outputText("System is online.")
 
+
 def performHandshake():
     EarphonesApi.outputText("Performing handshake now.")
     print "Performing handshake"
     isHandShakeSuccessful = False
     while not isHandShakeSuccessful:
         EarphonesApi.outputText("Looping handshake")
-	integrationSerial.sendMessage('1')
+        integrationSerial.sendMessage('1')
         print "Sent"
         message = clientSerial.getMessage()
         print "Incoming message was:" + str(message)
@@ -73,7 +71,7 @@ def performHandshake():
             print "Send and receive successful"
             integrationSerial.sendMessage('1')
             isHandShakeSuccessful = True
-	time.sleep(3)
+        time.sleep(3)
 
 
 #This is where the execution begins
@@ -103,6 +101,12 @@ print nextSteps.locationQueue
 integrationSerial.sendMessage('1')
 
 EarphonesApi.outputText("Please take a step forward")
+
+
+from business.deadreckoning.SerialQueueListener import SerialQueueListener
+from business.wifi.WiFiPoller import WiFiPoller
+from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
+
 
 t = Thread(target=SerialQueueListener.listen)
 t.daemon = True
