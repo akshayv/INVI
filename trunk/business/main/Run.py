@@ -64,14 +64,16 @@ def performHandshake():
     print "Performing handshake"
     isHandShakeSuccessful = False
     while not isHandShakeSuccessful:
-        integrationSerial.sendMessage('1')
+        EarphonesApi.outputText("Looping handshake")
+	integrationSerial.sendMessage('1')
         print "Sent"
         message = clientSerial.getMessage()
         print "Incoming message was:" + str(message)
-        if message == '1':
+        if message is not '':
             print "Send and receive successful"
             integrationSerial.sendMessage('1')
             isHandShakeSuccessful = True
+	time.sleep(3)
 
 
 #This is where the execution begins
@@ -97,6 +99,8 @@ positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.
 nextSteps = DirectionSpecifier()
 nextSteps.setLocationQueue(shortestPathNodes)
 print nextSteps.locationQueue
+
+integrationSerial.sendMessage('1')
 
 EarphonesApi.outputText("Please take a step forward")
 
