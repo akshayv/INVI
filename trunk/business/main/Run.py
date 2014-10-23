@@ -1,3 +1,4 @@
+import time
 from business.cache.GraphCache import GraphCache
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.PositionCalculator import PositionCalculator
@@ -8,10 +9,19 @@ from business.wifi.WiFiPoller import WiFiPoller
 from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
-
+import urllib2
 __author__ = 'akshay'
 
 from threading import Thread
+
+
+def internet_on():
+    try:
+        urllib2.urlopen('https://www.google.com', timeout=1)
+        return True
+    except urllib2.URLError as err:
+        pass
+    return False
 
 
 def getShortestPath():
@@ -55,9 +65,9 @@ def performHandshake():
     isHandShakeSuccessful = False
     while not isHandShakeSuccessful:
         integrationSerial.sendMessage('1')
-	print "Sent"
+        print "Sent"
         message = clientSerial.getMessage()
-	print "Incoming message was:" + str(message)
+        print "Incoming message was:" + str(message)
         if message == '1':
             print "Send and receive successful"
             integrationSerial.sendMessage('1')
@@ -65,6 +75,11 @@ def performHandshake():
 
 
 #This is where the execution begins
+
+#Check if internet access is available first.
+while not internet_on():
+    time.sleep(5)
+    EarphonesApi.outputText("No access to the network yet. Sleeping for 5 seconds.")
 
 initialMessage()
 performHandshake()
@@ -85,7 +100,6 @@ print nextSteps.locationQueue
 
 EarphonesApi.outputText("Please take a step forward")
 
-
 t = Thread(target=SerialQueueListener.listen)
 t.daemon = True
 t.start()
@@ -93,7 +107,6 @@ t.start()
 wifiThread = Thread(target=WiFiPoller.poll)
 wifiThread.daemon = True
 wifiThread.start()
-
 
 t = Thread(target=clientSerial.run)
 t.start()

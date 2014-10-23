@@ -4,7 +4,7 @@ import serial
 
 
 class SerialCommApi:
-    serial = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
+    serial = serial.Serial('/dev/ttyAMA0', 115200, timeout=1)
     serial.open()
     @staticmethod
     def sendMessage(message):

@@ -9,7 +9,7 @@ __author__ = 'akshay'
 
 class SerialCommApi:
 
-    serial = serial.Serial('/dev/ttyAMA0', 9600, timeout=None)
+    serial = serial.Serial('/dev/ttyAMA0', 115200, timeout=None)
     serial.open()
     @staticmethod
     def onSerialMessage(item):
