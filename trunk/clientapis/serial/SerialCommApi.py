@@ -8,9 +8,9 @@ __author__ = 'akshay'
 
 
 class SerialCommApi:
-
     serial = serial.Serial('/dev/ttyAMA0', 115200, timeout=None)
     serial.open()
+
     @staticmethod
     def onSerialMessage(item):
         SerialQueueListener.queue.put(item)
@@ -20,14 +20,15 @@ class SerialCommApi:
         while True:
             try:
                 inp = SerialCommApi.serial.readline()
-	        print inp
+                print inp
                 SerialCommApi.onSerialMessage(SensorReading.fromString(inp))
             except Exception:
-		print "ERROR DATA"
+                print "ERROR DATA"
 
     @classmethod
     def getMessage(cls):
         return SerialCommApi.serial.readline().replace("\n", "").strip()
 
+
 if __name__ == "__main__":
-	SerialCommApi.run()
+    SerialCommApi.run()
