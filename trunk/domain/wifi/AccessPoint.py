@@ -1,6 +1,7 @@
 from integration.http.map.MapRetriever import MapRetriever
 from integration.terminal.CommandExecutor import CommandExecutor
 from integration.terminal.Platform import Platform
+from wifi import Cell
 
 __author__ = 'raghav'
 
@@ -30,11 +31,14 @@ class AccessPoint:
                 ap_info.append({ "bssid": networkInfo[1], "rssi": networkInfo[2] })
             ap_info.pop(0) # Check for exception
 
-            # Filter similar APs
-            ap_info = self.filterRepeatingAccessPoints(ap_info)
-
         elif Platform().getOS() == "Linux":
-            pass
+            points = Cell.all('wlan0')
+            for i in range(len(points)):
+                if points[i].ssid == "NUS":
+                    ap_info.append({ "bssid": points[i].address, "rssi": points[i].signal })
+
+        # Filter similar APs
+        ap_info = self.filterRepeatingAccessPoints(ap_info)
         return ap_info
 
     def getMapAccessPoints(self, building, level):
@@ -66,4 +70,3 @@ if __name__ == "__main__":
     print "checkIfBSSIDIsSame:", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:DD:5E:AA:22:5B")
     print "getNearbyAccessPoints:", access_point.getNearbyAccessPoints()
     print "filterRepeatingAccessPoints:", access_point.filterRepeatingAccessPoints(access_point.getNearbyAccessPoints())
-
