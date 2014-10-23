@@ -23,7 +23,7 @@ class StepCounter(object):
     def isStep(self, accelerometerReading, currentTime):
         isStep = False
         amplitude = accelerometerReading.amplitude()
-        if self.__lastReadingTime is not None and currentTime - self.__lastReadingTime > 100:
+        if self.__lastReadingTime is not None and currentTime - self.__lastReadingTime > 200:
             self.__lastReading = amplitude
             self.__lastReadingTime = currentTime
             self.__lastDir = 1
