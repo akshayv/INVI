@@ -6,6 +6,7 @@ from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
+from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 import urllib2
 __author__ = 'akshay'
 
@@ -105,7 +106,6 @@ EarphonesApi.outputText("Please take a step forward")
 
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from business.wifi.WiFiPoller import WiFiPoller
-from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 
 
 t = Thread(target=SerialQueueListener.listen)
