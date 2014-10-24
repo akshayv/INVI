@@ -1,6 +1,7 @@
 from time import sleep
 from business.deadreckoning.PositionCalculator import PositionCalculator
 from business.wifi.WiFiLocationCalculator import WiFiLocationCalculator
+from integration.earphones.EarphonesApi import EarphonesApi
 from domain.wifi.AccessPoint import AccessPoint
 
 __author__ = 'raghav'
@@ -10,13 +11,14 @@ class WiFiPoller:
     @staticmethod
     def poll():
         while(True):
+            # EarphonesApi.outputText("WiFi is online")
             positionCalculator = PositionCalculator()
             x = positionCalculator.getX()
             y = positionCalculator.getY()
 
             a, b = WiFiPoller.checkLocation()
             if type(a) == str:
-                # Earphone output
+                # EarphonesApi.outputText(a)
                 continue
 
             if not(x-700 <= a <= x+700 and y-700 <= b <= y+700):
@@ -29,7 +31,11 @@ class WiFiPoller:
         access_point = AccessPoint()
 
         nearbyAP = access_point.getNearbyAccessPoints()
-        mapAP = access_point.getMapAccessPoints("COM1", 2)
+
+        # For Week 11 demo
+        building = "1"
+        level = 2
+        mapAP = access_point.getMapAccessPoints(building, level)
         filteredAP = []
         for nap in nearbyAP:
             for map in mapAP:
@@ -43,6 +49,7 @@ class WiFiPoller:
 
         # Compute location only if there are at least 2 strong rssi
         if len(topAPs) >= 2:
+            EarphonesApi.outputText("Correcting location using WiFi")
             for item in topAPs:
                 item["distance"] = location_calculator.computeDistanceFromRSSI(item["rssi"]) * 100
                 coordinate = access_point.getCoordinate("COM1", 2, item["nodeId"])
