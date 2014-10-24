@@ -14,7 +14,7 @@ class PositionCalculator(object):
     stepCounter = StepCounter()
     __instance = None
 
-    __K_constant = 0.2
+    __K_constant = 0.4
     __lastStepTime = None
     __lastStepDir = None
 
@@ -27,9 +27,12 @@ class PositionCalculator(object):
         return cls.__instance
 
     def __init__(self, curX=None, curY=None, northAt=None):
-        self.__curX = curX
-        self.__curY = curY
-        self.__northAt = northAt
+        if curX is not None:
+            self.__curX = curX
+        if curY is not None:
+            self.__curY = curY
+        if northAt is not None:
+            self.__northAt = northAt
 
     def getX(self):
         return self.__curX
@@ -53,17 +56,19 @@ class PositionCalculator(object):
             raise Exception("Data in is not sensor reading")
 
         if self.__lastStepTime is not None and sensorReading.currentTime > self.__lastStepTime + 50:
-            relativeTheta = radians(90 - (self.__northAt + self.__lastStepDir) % 360) % 360
+            relativeTheta = radians((90 - ((self.__northAt + self.__lastStepDir) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
             strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
             self.__curX += strideLength * cos(relativeTheta)
             self.__curY += strideLength * sin(relativeTheta)
+            print "CurX: " + str(self.__curX)
+            print "CurY: " + str(self.__curY)
+            print "Stride Length: " + str(strideLength)
             self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir, self.__northAt)
             self.__lastStepTime = None
 
         if self.stepCounter.isStep(sensorReading.accelerometerReading, sensorReading.currentTime) is True:
-            print "Step was taken"
             self.__lastStepDir = sensorReading.compassReading
             self.__lastStepTime = sensorReading.currentTime
         self.__curDirection = sensorReading.compassReading

@@ -1,4 +1,4 @@
-from math import sqrt, atan2, degrees
+from math import atan2, degrees
 from domain.graph.Point import Point
 from integration.earphones.EarphonesApi import EarphonesApi
 
@@ -41,6 +41,7 @@ class DirectionSpecifier(object):
         bearing = (90 - dirInAngle) % 360
         adjustedBearing = (bearing + 360 - northAt) % 360
         delta = (adjustedBearing - curDir) % 360
+        print "Delta:" + str(delta)
         return delta
 
     def getNextDirection(self, curX, curY, curDir, northAt):
@@ -63,8 +64,8 @@ class DirectionSpecifier(object):
             return DirectionSpecifier.STRAIGHT_LEFT
 
     def next(self, curX, curY, curDir, northAt):
-        if abs(curX - self.nextLocation.getX()) < 3.0 and abs(
-                        curY - self.nextLocation.getY()) < 3.0:
+        if abs(curX - self.nextLocation.getX()) < 100.0 and abs(
+                        curY - self.nextLocation.getY()) < 100.0:
             curr = self.locationQueue.pop(0)
             self.nextLocation = self.locationQueue[0]
             EarphonesApi.outputText(

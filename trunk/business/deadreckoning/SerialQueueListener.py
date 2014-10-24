@@ -1,5 +1,4 @@
 from Queue import Queue
-import time
 from business.deadreckoning.PositionCalculator import PositionCalculator
 
 __author__ = 'akshay'
@@ -17,4 +16,3 @@ class SerialQueueListener:
             message = SerialQueueListener.queue.get(True)
             SerialQueueListener.positionCalculator.updatePosition(message)
             SerialQueueListener.queue.task_done()
-            time.sleep(0.1)

@@ -2,14 +2,15 @@ import time
 from business.cache.GraphCache import GraphCache
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.PositionCalculator import PositionCalculator
-from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
-from business.wifi.WiFiPoller import WiFiPoller
-from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
+from domain.deadreckoning.SensorReading import SensorReading
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
+from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
+from business.wifi.WiFiPoller import WiFiPoller
 import urllib2
+
 __author__ = 'akshay'
 
 from threading import Thread
@@ -17,7 +18,7 @@ from threading import Thread
 
 def internet_on():
     try:
-        urllib2.urlopen('https://www.google.com', timeout=1)
+        urllib2.urlopen('http://showmyway.comp.nus.edu.sg', timeout=1)
         return True
     except urllib2.URLError as err:
         pass
@@ -59,20 +60,38 @@ def getDestination():
 def initialMessage():
     EarphonesApi.outputText("System is online.")
 
+
 def performHandshake():
     EarphonesApi.outputText("Performing handshake now.")
     print "Performing handshake"
     isHandShakeSuccessful = False
     while not isHandShakeSuccessful:
+        EarphonesApi.outputText("Looping handshake")
         integrationSerial.sendMessage('1')
         print "Sent"
         message = clientSerial.getMessage()
         print "Incoming message was:" + str(message)
-        if message == '1':
+        if message is not '':
             print "Send and receive successful"
             integrationSerial.sendMessage('1')
             isHandShakeSuccessful = True
+        time.sleep(3)
 
+
+# This is not really a good way to do things but it is a quick fix
+def getInitialDirection():
+    global compassVal, inp
+    compassVal = None
+    while compassVal is None:
+        try:
+            EarphonesApi.outputText("Trying to get compass direction")
+            inp = clientSerial.serial.readline()
+            compassVal = SensorReading.fromString(inp).compassReading
+            EarphonesApi.outputText("Got initial compass direction")
+        except Exception:
+            print "ERROR DATA"
+    positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(), compassVal,
+                                               floorGraph.northAt)
 
 #This is where the execution begins
 
@@ -94,11 +113,11 @@ shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPositi
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
 
+from business.deadreckoning.SerialQueueListener import SerialQueueListener
+
 nextSteps = DirectionSpecifier()
 nextSteps.setLocationQueue(shortestPathNodes)
 print nextSteps.locationQueue
-
-EarphonesApi.outputText("Please take a step forward")
 
 t = Thread(target=SerialQueueListener.listen)
 t.daemon = True
@@ -107,6 +126,10 @@ t.start()
 wifiThread = Thread(target=WiFiPoller.poll)
 wifiThread.daemon = True
 wifiThread.start()
+
+integrationSerial.sendMessage('1')
+
+getInitialDirection()
 
 t = Thread(target=clientSerial.run)
 t.start()
