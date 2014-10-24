@@ -14,7 +14,7 @@ class PositionCalculator(object):
     stepCounter = StepCounter()
     __instance = None
 
-    __K_constant = 0.4
+    __K_constant = 0.354
     __lastStepTime = None
     __lastStepDir = None
     __lastStepCounted = True
@@ -72,7 +72,7 @@ class PositionCalculator(object):
             self.__lastStepCounted = True
 
         if (self.__lastStepTime is None or (
-            sensorReading.currentTime - self.__lastStepTime) > 500) and self.stepCounter.isStep(
+            sensorReading.currentTime - self.__lastStepTime) > 1000) and self.stepCounter.isStep(
                 sensorReading.accelerometerReading, sensorReading.currentTime) is True:
             self.__lastStepDir = sensorReading.compassReading
             self.__lastStepTime = sensorReading.currentTime
