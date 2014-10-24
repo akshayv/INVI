@@ -41,6 +41,7 @@ class DirectionSpecifier(object):
         bearing = (90 - dirInAngle) % 360
         adjustedBearing = (bearing + 360 - northAt) % 360
         delta = (adjustedBearing - curDir) % 360
+        print "Delta:" + str(delta)
         return delta
 
     def getNextDirection(self, curX, curY, curDir, northAt):

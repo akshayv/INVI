@@ -4,11 +4,13 @@ from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.PositionCalculator import PositionCalculator
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
+from domain.deadreckoning.SensorReading import SensorReading
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
 from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
 from business.wifi.WiFiPoller import WiFiPoller
 import urllib2
+
 __author__ = 'akshay'
 
 from threading import Thread
@@ -76,6 +78,21 @@ def performHandshake():
         time.sleep(3)
 
 
+# This is not really a good way to do things but it is a quick fix
+def getInitialDirection():
+    global compassVal, inp
+    compassVal = None
+    while compassVal is None:
+        try:
+            EarphonesApi.outputText("Trying to get compass direction")
+            inp = clientSerial.serial.readline()
+            compassVal = SensorReading.fromString(inp).compassReading
+            EarphonesApi.outputText("Got initial compass direction")
+        except Exception:
+            print "ERROR DATA"
+    positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(), compassVal,
+                                               floorGraph.northAt)
+
 #This is where the execution begins
 
 #Check if internet access is available first.
@@ -96,7 +113,6 @@ shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPositi
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
 
-
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
 
 nextSteps = DirectionSpecifier()
@@ -111,9 +127,9 @@ wifiThread = Thread(target=WiFiPoller.poll)
 wifiThread.daemon = True
 wifiThread.start()
 
-EarphonesApi.outputText("Move forward")
-
 integrationSerial.sendMessage('1')
+
+getInitialDirection()
 
 t = Thread(target=clientSerial.run)
 t.start()
