@@ -20,7 +20,6 @@ class SerialCommApi:
         while True:
             try:
                 inp = SerialCommApi.serial.readline()
-                print inp
                 SerialCommApi.onSerialMessage(SensorReading.fromString(inp))
             except Exception:
                 print "ERROR DATA"
