@@ -68,7 +68,9 @@ class PositionCalculator(object):
             self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir, self.__northAt)
             self.__lastStepTime = None
 
-        if self.stepCounter.isStep(sensorReading.accelerometerReading, sensorReading.currentTime) is True:
+        if (self.__lastStepTime is None or (
+            sensorReading.currentTime - self.__lastStepTime) > 500) and self.stepCounter.isStep(
+                sensorReading.accelerometerReading, sensorReading.currentTime) is True:
             self.__lastStepDir = sensorReading.compassReading
             self.__lastStepTime = sensorReading.currentTime
         self.__curDirection = sensorReading.compassReading

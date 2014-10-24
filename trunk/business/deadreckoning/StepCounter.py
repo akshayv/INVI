@@ -4,7 +4,7 @@ __author__ = 'akshay'
 class StepCounter(object):
     __numSteps = 0
 
-    __deltaH = 3.5
+    __deltaH = 4.5
     __lastReadingTime = None
     __lastReading = None
     __lastDir = 1
