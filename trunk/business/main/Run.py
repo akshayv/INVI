@@ -105,13 +105,15 @@ print nextSteps.locationQueue
 
 integrationSerial.sendMessage('1')
 
+t = Thread(target=SerialQueueListener.listen)
+t.daemon = True
+t.start()
+time.sleep(0.5)
+
 positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(),
                                            positionCalculator.getCurrentDirection(), floorGraph.northAt)
 
 
-t = Thread(target=SerialQueueListener.listen)
-t.daemon = True
-t.start()
 
 wifiThread = Thread(target=WiFiPoller.poll)
 wifiThread.daemon = True
