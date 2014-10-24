@@ -101,13 +101,6 @@ class KeyPadApi:
 
     @staticmethod
     def getBuilding():
-        locations = ["COM1", "COM2"]
-        locNum = {}
-        for i in range(len(locations)):
-            EarphonesApi.outputText(i, 250)
-            EarphonesApi.outputText(locations[i], 250)
-            time.sleep(0.2)
-            locNum[i] = locations[i]
         EarphonesApi.outputText("Please enter the building number followed by a hash", 250)
         num = ""
         while True:
@@ -116,9 +109,7 @@ class KeyPadApi:
                 num += str(key)
             else:
                 break
-        if int(num) > len(locations) - 1:
-            raise Exception("No such option")
-        return locNum[int(num)]
+        return num
 
 
 if __name__ == "__main__":
