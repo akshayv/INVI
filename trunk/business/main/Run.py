@@ -111,6 +111,8 @@ wifiThread = Thread(target=WiFiPoller.poll)
 wifiThread.daemon = True
 wifiThread.start()
 
+EarphonesApi.outputText("Move forward")
+
 integrationSerial.sendMessage('1')
 
 t = Thread(target=clientSerial.run)
