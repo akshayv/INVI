@@ -1,4 +1,5 @@
 from math import atan2, degrees
+import sys
 from domain.graph.Point import Point
 from integration.earphones.EarphonesApi import EarphonesApi
 
@@ -67,6 +68,10 @@ class DirectionSpecifier(object):
         if abs(curX - self.nextLocation.getX()) < 100.0 and abs(
                         curY - self.nextLocation.getY()) < 100.0:
             curr = self.locationQueue.pop(0)
+            if len(self.locationQueue) == 0:
+                EarphonesApi.outputText("You have reached your destination.")
+                sys.exit()
+
             self.nextLocation = self.locationQueue[0]
             EarphonesApi.outputText(
                 "You are currently at " + str(curr.getName()) + ". Moving to " + str(self.nextLocation.getName()))
