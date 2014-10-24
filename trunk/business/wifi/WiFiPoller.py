@@ -15,6 +15,9 @@ class WiFiPoller:
             y = positionCalculator.getY()
 
             a, b = WiFiPoller.checkLocation()
+            if type(a) == str:
+                # Earphone output
+                continue
 
             if not(x-700 <= a <= x+700 and y-700 <= b <= y+700):
                 print "Hang on while we recompute your location"
@@ -46,7 +49,7 @@ class WiFiPoller:
                 item["x"] = coordinate["x"]
                 item["y"] = coordinate["y"]
             return location_calculator.computeLocation(topAPs)
-        return "Unable to correct location due to weak WiFi signals"
+        return "Unable to correct location due to weak WiFi signals", None
 
 if __name__ == "__main__":
     wifiPoller = WiFiPoller()
