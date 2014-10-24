@@ -73,16 +73,16 @@ class KeyPadApi:
 
     @staticmethod
     def getLocation(possibleLocations):
-        EarphonesApi.outputText(
-            "The locations will now be specified to you with a number.", 250)
-        locNum = {}
-        for i in range(len(possibleLocations)):
-            EarphonesApi.outputText(i, 250)
-            EarphonesApi.outputText(possibleLocations[i].getName(), 250)
-            time.sleep(0.2)
-            locNum[i] = possibleLocations[i]
+        # EarphonesApi.outputText(
+        #     "The locations will now be specified to you with a number.", 250)
+        # locNum = {}
+        # for i in range(len(possibleLocations)):
+        #     EarphonesApi.outputText(i, 250)
+        #     EarphonesApi.outputText(possibleLocations[i].getName(), 250)
+        #     time.sleep(0.2)
+        #     locNum[i] = possibleLocations[i]
 
-        EarphonesApi.outputText("Please enter the number followed by hash", 250)
+        EarphonesApi.outputText("Please enter the nodeId followed by hash", 250)
         num = ""
         key = ''
         while True:
@@ -91,7 +91,7 @@ class KeyPadApi:
                 num += str(key)
             else:
                 break
-        return locNum[int(num)]
+        return possibleLocations[int(num) - 1]
 
     @staticmethod
     def getConfirmation():
