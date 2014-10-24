@@ -11,14 +11,14 @@ class WiFiPoller:
     @staticmethod
     def poll():
         while(True):
-            EarphonesApi.outputText("WiFi is online")
+            # EarphonesApi.outputText("WiFi is online")
             positionCalculator = PositionCalculator()
             x = positionCalculator.getX()
             y = positionCalculator.getY()
 
             a, b = WiFiPoller.checkLocation()
             if type(a) == str:
-                EarphonesApi.outputText(a)
+                # EarphonesApi.outputText(a)
                 continue
 
             if not(x-700 <= a <= x+700 and y-700 <= b <= y+700):
