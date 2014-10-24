@@ -7,6 +7,7 @@ from business.graph.location.LocationRetriever import LocationRetriever
 from integration.earphones.EarphonesApi import EarphonesApi
 from integration.serial.SerialCommApi import SerialCommApi as integrationSerial
 from clientapis.serial.SerialCommApi import SerialCommApi as clientSerial
+from business.wifi.WiFiPoller import WiFiPoller
 import urllib2
 __author__ = 'akshay'
 
@@ -15,7 +16,7 @@ from threading import Thread
 
 def internet_on():
     try:
-        urllib2.urlopen('https://www.google.com', timeout=1)
+        urllib2.urlopen('http://showmyway.comp.nus.edu.sg', timeout=1)
         return True
     except urllib2.URLError as err:
         pass
@@ -95,17 +96,17 @@ shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPositi
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
 
+
+from business.deadreckoning.SerialQueueListener import SerialQueueListener
+
 nextSteps = DirectionSpecifier()
 nextSteps.setLocationQueue(shortestPathNodes)
 print nextSteps.locationQueue
 
 integrationSerial.sendMessage('1')
 
-EarphonesApi.outputText("Please take a step forward")
-
-
-from business.deadreckoning.SerialQueueListener import SerialQueueListener
-from business.wifi.WiFiPoller import WiFiPoller
+positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(),
+                                           positionCalculator.getCurrentDirection(), floorGraph.northAt)
 
 
 t = Thread(target=SerialQueueListener.listen)
