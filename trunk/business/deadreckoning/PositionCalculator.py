@@ -14,9 +14,10 @@ class PositionCalculator(object):
     stepCounter = StepCounter()
     __instance = None
 
-    __K_constant = 0.4
+    __K_constant = 0.354
     __lastStepTime = None
     __lastStepDir = None
+    __lastStepCounted = True
 
     directionSpecifier = DirectionSpecifier()
 
@@ -55,7 +56,9 @@ class PositionCalculator(object):
         if not isinstance(sensorReading, SensorReading):
             raise Exception("Data in is not sensor reading")
 
-        if self.__lastStepTime is not None and sensorReading.currentTime > self.__lastStepTime + 50:
+        if self.__lastStepCounted is False\
+            and sensorReading.currentTime > self.__lastStepTime + 50:
+
             relativeTheta = radians((90 - ((self.__northAt + self.__lastStepDir) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
@@ -66,9 +69,12 @@ class PositionCalculator(object):
             print "CurY: " + str(self.__curY)
             print "Stride Length: " + str(strideLength)
             self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir, self.__northAt)
-            self.__lastStepTime = None
+            self.__lastStepCounted = True
 
-        if self.stepCounter.isStep(sensorReading.accelerometerReading, sensorReading.currentTime) is True:
+        if (self.__lastStepTime is None or (
+            sensorReading.currentTime - self.__lastStepTime) > 1000) and self.stepCounter.isStep(
+                sensorReading.accelerometerReading, sensorReading.currentTime) is True:
             self.__lastStepDir = sensorReading.compassReading
             self.__lastStepTime = sensorReading.currentTime
+            self.__lastStepCounted = False
         self.__curDirection = sensorReading.compassReading
