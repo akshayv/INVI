@@ -1,5 +1,6 @@
 from math import atan2, degrees
 import sys
+from business.deadreckoning.NorthAt import NorthAt
 from domain.graph.Point import Point
 from integration.earphones.EarphonesApi import EarphonesApi
 
@@ -9,6 +10,7 @@ __author__ = 'akshay'
 class DirectionSpecifier(object):
     locationQueue = []
     nextLocation = None
+    curLevelQueue = []
 
     UP = "straight"
     DOWN = "back"
@@ -34,7 +36,10 @@ class DirectionSpecifier(object):
     def setLocationQueue(self, locationQueue):
         self.locationQueue = locationQueue
         if len(locationQueue) is not 0:
-            self.nextLocation = locationQueue[0]
+            temp = locationQueue.pop(0)
+            self.curLevelQueue = temp["graph"]
+            NorthAt().setNorthAt(temp["northAt"])
+            self.nextLocation = self.curLevelQueue[0]
 
     def getNextHeading(self, curDir, curX, curY, northAt):
         dirInAngle = degrees(atan2((self.nextLocation.getY() - curY), (
@@ -65,27 +70,33 @@ class DirectionSpecifier(object):
         elif 292 < delta <= 338:
             return DirectionSpecifier.STRAIGHT_LEFT
 
-    def next(self, curX, curY, curDir, northAt):
+    def next(self, curX, curY, curDir):
         if abs(curX - self.nextLocation.getX()) < 100.0 and abs(
                         curY - self.nextLocation.getY()) < 100.0:
-            curr = self.locationQueue.pop(0)
-            if len(self.locationQueue) == 0:
+            curr = self.curLevelQueue.pop(0)
+            if len(self.curLevelQueue) == 0 and len(self.locationQueue) == 0:
                 EarphonesApi.outputText("You have reached your destination.")
                 sys.exit()
+            elif len(self.curLevelQueue) == 0 and len(self.locationQueue) != 0:
+                EarphonesApi.outputText("Entering next building")
+                temp = self.locationQueue.pop(0)
+                NorthAt().setNorthAt(temp["northAt"])
+                self.curLevelQueue = temp["graph"]
+                curr = self.curLevelQueue.pop(0)
 
-            self.nextLocation = self.locationQueue[0]
+            self.nextLocation = self.curLevelQueue[0]
             EarphonesApi.outputText(
                 "You are currently at " + str(curr.getName()) + ". Moving to " + str(self.nextLocation.getName()))
 
-        EarphonesApi.outputText("Move one step " + self.getNextDirection(curX, curY, curDir, northAt))
+        EarphonesApi.outputText("Move one step " + self.getNextDirection(curX, curY, curDir, NorthAt().getNorthAt()))
 
 
 if __name__ == "__main__":
-    locations = [Point.fromString("( nodeId = 26, x = 5220.0, y = 1600.0, name = Seminar Room 11 )"),
+    locations = [{"graph":[Point.fromString("( nodeId = 26, x = 5220.0, y = 1600.0, name = Seminar Room 11 )"),
                  Point.fromString("( nodeId = 23, x = 5220.0, y = 1380.0, name = P24 )"),
                  Point.fromString("( nodeId = 27, x = 5220.0, y = 620.0, name = P28 )"),
                  Point.fromString("( nodeId = 25, x = 5220.0, y = 360.0, name = P26 )"),
-                 Point.fromString("( nodeId = 21, x = 4800.0, y = 360.0, name = P22 )")]
+                 Point.fromString("( nodeId = 21, x = 4800.0, y = 360.0, name = P22 )")], "northAt": 180}]
     directionSpecifier = DirectionSpecifier()
     directionSpecifier.setLocationQueue(locations)
-    directionSpecifier.next(5220.0, 1600.0, 120, 180)
+    directionSpecifier.next(5220.0, 1600.0, 120)

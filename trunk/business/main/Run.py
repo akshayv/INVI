@@ -1,6 +1,7 @@
 import time
 from business.cache.GraphCache import GraphCache
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
+from business.deadreckoning.NorthAt import NorthAt
 from business.deadreckoning.PositionCalculator import PositionCalculator
 from business.graph.dijkstra.PathRetriever import PathRetriever
 from business.graph.location.LocationRetriever import LocationRetriever
@@ -77,11 +78,94 @@ def performHandshake():
             isHandShakeSuccessful = True
         time.sleep(3)
 
+def getShortestPathNodes(initialPosition, destination):
+
+    graphCache = GraphCache()
+    shortestPathNodes = []
+    floorGraph = graphCache.getGraph(initialPosition.getBuilding(), initialPosition.getLevel())
+    if destination.getBuilding() is not initialPosition.getBuilding() or destination.getLevel() is not initialPosition.getLevel():
+        if initialPosition.getBuilding() == "1" or initialPosition.getBuilding() == "COM1":
+            if destination.getLevel() == "2":
+                shortestPathNodes.append({"graph":
+                                              PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
+                                                                                 "TO COM2-2-1"),
+                                          "northAt": floorGraph.northAt})
+
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO COM1-2-31",
+                    destination.getName()),
+                                          "northAt": graphCache.getGraph(destination.getBuilding(),
+                                                                         destination.getLevel()).northAt})
+
+            elif destination.getLevel() == "3":
+                shortestPathNodes.append({"graph":
+                    PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(), "TO COM2-2-1"),
+                                          "northAt": floorGraph.northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), "2"), "TO COM1-2-31",
+                    "TO COM2-3-12"), "northAt": graphCache.getGraph(destination.getBuilding(), "2").northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), "3"), "TO COM2-2-16",
+                    destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(), "3").northAt})
+
+        elif (
+                    initialPosition.getBuilding() == "2" or initialPosition.getBuilding() == "COM2") and initialPosition.getLevel() == "2":
+            if destination.getBuilding() == "1":
+                shortestPathNodes.append({"graph":
+                    PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(), "TO COM1-2-31"),
+                                          "northAt": floorGraph.northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO COM2-2-1",
+                    destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(),
+                                                                           destination.getLevel()).northAt})
+
+            elif destination.getLevel() == "3":
+                shortestPathNodes.append({"graph":
+                                              PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
+                                                                                 "TO COM2-3-12"),
+                                          "northAt": floorGraph.northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO COM2-2-16",
+                    destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(),
+                                                                           destination.getLevel()).northAt})
+
+        elif (
+                    initialPosition.getBuilding() == "2" or initialPosition.getBuilding() == "COM2") and initialPosition.getLevel() == "3":
+            if destination.getBuilding() == "1":
+                shortestPathNodes.append({"graph":
+                                              PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
+                                                                                 "TO COM2-2-16"),
+                                          "northAt": floorGraph.northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(initialPosition.getBuilding(), "2"), "TO COM2-3-12",
+                    "TO COM1-2-31"), "northAt": graphCache.getGraph(initialPosition.getBuilding(), "2").northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO COM2-2-1",
+                    destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(),
+                                                                           destination.getLevel()).northAt})
+            elif destination.getLevel() == "2":
+                shortestPathNodes.append({"graph":
+                                              PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
+                                                                                 "TO COM2-2-16"),
+                                          "northAt": floorGraph.northAt})
+                shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO COM2-3-12",
+                    destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(),
+                                                                           destination.getLevel()).northAt})
+
+    else:
+        shortestPathNodes.append({"graph":
+                                      PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
+                                                                         destination.getName()),
+                                  "northAt": floorGraph.northAt})
+    return shortestPathNodes
+
 
 # This is not really a good way to do things but it is a quick fix
 def getInitialDirection():
     global compassVal, inp
     compassVal = None
+    NorthAt().setNorthAt(floorGraph.northAt)
     while compassVal is None:
         try:
             EarphonesApi.outputText("Trying to get compass direction")
@@ -90,8 +174,7 @@ def getInitialDirection():
             EarphonesApi.outputText("Got initial compass direction")
         except Exception:
             print "ERROR DATA"
-    positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(), compassVal,
-                                               floorGraph.northAt)
+    positionCalculator.directionSpecifier.next(initialPosition.getX(), initialPosition.getY(), compassVal)
 
 #This is where the execution begins
 
@@ -105,10 +188,9 @@ performHandshake()
 initialPosition = getInitialPosition()
 destination = getDestination()
 
-graphCache = GraphCache()
-floorGraph = graphCache.getGraph(initialPosition.getBuilding(), initialPosition.getLevel())
+shortestPathNodes = getShortestPathNodes(initialPosition, destination)
 
-shortestPathNodes = PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(), destination.getName())
+floorGraph = GraphCache().getGraph(initialPosition.getBuilding(), initialPosition.getLevel())
 
 #initialize the singleton here
 positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)

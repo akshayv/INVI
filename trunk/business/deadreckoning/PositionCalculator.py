@@ -1,5 +1,6 @@
 from math import cos, sin, radians
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
+from business.deadreckoning.NorthAt import NorthAt
 from business.deadreckoning.StepCounter import StepCounter
 from domain.deadreckoning.SensorReading import SensorReading
 
@@ -32,7 +33,7 @@ class PositionCalculator(object):
         if curY is not None:
             self.__curY = curY
         if northAt is not None:
-            self.__northAt = northAt
+            self.__northAt = NorthAt(northAt)
 
     def getX(self):
         return self.__curX
@@ -41,7 +42,7 @@ class PositionCalculator(object):
         return self.__curY
 
     def getNorthAt(self):
-        return self.__northAt
+        return self.__northAt.getNorthAt()
 
     #compassReading is the angle difference between North and current heading in degrees
     #currentTime is the time at which the reading was taken in millis
@@ -52,7 +53,7 @@ class PositionCalculator(object):
         if self.__lastStepCounted is False\
             and sensorReading.currentTime > self.__lastStepTime + 50:
 
-            relativeTheta = radians((90 - ((self.__northAt + self.__lastStepDir) % 360)) % 360)
+            relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + self.__lastStepDir) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
             strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
@@ -61,7 +62,7 @@ class PositionCalculator(object):
             print "CurX: " + str(self.__curX)
             print "CurY: " + str(self.__curY)
             print "Stride Length: " + str(strideLength)
-            self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir, self.__northAt)
+            self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir)
             self.__lastStepCounted = True
 
         if (self.__lastStepTime is None or (
