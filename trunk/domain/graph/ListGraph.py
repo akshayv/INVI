@@ -15,6 +15,8 @@ class ListGraph:
         self.numV = numV
         self.northAt = northAt
         self.edges = []
+        self.nodeNameIdMap = {}
+        self.pointsIdMap = {}
         for i in range(0, numV):
             self.edges.append([])
 

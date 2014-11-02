@@ -60,57 +60,32 @@ class KeyPadApi:
 
 
     @staticmethod
-    def getLevel():
+    def getLocation():
         levelStr = ""
-        EarphonesApi.outputText("Please enter the level followed by a hash", 250)
+        buildingStr = ""
+        nodeIdStr = ""
+
+        count = 0
         while True:
             key = KeyPadApi.getKey()
             if key is not '#':
-                levelStr += str(key)
+                if count == 0:
+                    buildingStr += str(key)
+                elif count == 1:
+                    levelStr += str(key)
+                elif count == 2:
+                    nodeIdStr += str(key)
             else:
-                break
-        return levelStr
-
-    @staticmethod
-    def getLocation(possibleLocations):
-        # EarphonesApi.outputText(
-        #     "The locations will now be specified to you with a number.", 250)
-        # locNum = {}
-        # for i in range(len(possibleLocations)):
-        #     EarphonesApi.outputText(i, 250)
-        #     EarphonesApi.outputText(possibleLocations[i].getName(), 250)
-        #     time.sleep(0.2)
-        #     locNum[i] = possibleLocations[i]
-
-        EarphonesApi.outputText("Please enter the nodeId followed by hash", 250)
-        num = ""
-        key = ''
-        while True:
-            key = KeyPadApi.getKey()
-            if key is not '#':
-                num += str(key)
-            else:
-                break
-        return possibleLocations[int(num) - 1]
+                count += 1
+                if count == 3:
+                    break
+        return buildingStr, levelStr, nodeIdStr
 
     @staticmethod
     def getConfirmation():
         EarphonesApi.outputText("To confirm press 1", 250)
         key = KeyPadApi.getKey()
         return key == 1
-
-    @staticmethod
-    def getBuilding():
-        EarphonesApi.outputText("Please enter the building number followed by a hash", 250)
-        num = ""
-        while True:
-            key = KeyPadApi.getKey()
-            if key is not '#':
-                num += str(key)
-            else:
-                break
-        return num
-
 
 if __name__ == "__main__":
     print KeyPadApi.getKey()

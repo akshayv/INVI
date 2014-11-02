@@ -13,20 +13,13 @@ class LocationRetriever:
 
         building = None
         level = 0
-        location = None
+        nodeId=None
 
         confirmation = False
         while not confirmation:
-            EarphonesApi.outputText("Please specify Building Name")
-            building = KeyPadApi.getBuilding()
-            EarphonesApi.outputText("You have input " + building + ". Is this correct?")
-            confirmation = KeyPadApi.getConfirmation()
-
-        confirmation = False
-        while not confirmation:
-            EarphonesApi.outputText("Please specify Level")
-            level = KeyPadApi.getLevel()
-            EarphonesApi.outputText("You have input " + level + ". Is this correct?")
+            EarphonesApi.outputText("Please specify building Name, level and node id")
+            building, level, nodeId = KeyPadApi.getLocation()
+            EarphonesApi.outputText("You have input " + building + ", " + level + ", " + nodeId + ". Is this correct?")
             confirmation = KeyPadApi.getConfirmation()
 
         EarphonesApi.outputText("Retrieving graph now.")
@@ -35,14 +28,7 @@ class LocationRetriever:
         if len(floorGraph.edges) == 0:
             raise Exception("Looks like there is no such location. Try again")
 
-        confirmation = False
-        while not confirmation:
-            EarphonesApi.outputText("Please specify Location")
-            location = KeyPadApi.getLocation(floorGraph.getNodes())
-            EarphonesApi.outputText("You have input " + location.getName() + ". Is this correct?")
-            confirmation = KeyPadApi.getConfirmation()
-
-        point = floorGraph.pointsIdMap.get(floorGraph.nodeNameIdMap.get(location.getName()))
+        point = floorGraph.pointsIdMap.get(int(nodeId) - 1)
         position = Position(building, level, point.getX(), point.getY(), point.getName())
         return position
 

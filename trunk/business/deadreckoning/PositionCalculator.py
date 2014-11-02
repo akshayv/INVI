@@ -9,7 +9,6 @@ __author__ = 'akshay'
 class PositionCalculator(object):
     __curX = None
     __curY = None
-    __curDirection = None
     __northAt = None
     stepCounter = StepCounter()
     __instance = None
@@ -41,14 +40,8 @@ class PositionCalculator(object):
     def getY(self):
         return self.__curY
 
-    def getCurrentDirection(self):
-        return self.__curDirection
-
     def getNorthAt(self):
         return self.__northAt
-
-    def setCurDirection(self, curDir):
-        self.__curDirection = curDir
 
     #compassReading is the angle difference between North and current heading in degrees
     #currentTime is the time at which the reading was taken in millis
@@ -77,4 +70,3 @@ class PositionCalculator(object):
             self.__lastStepDir = sensorReading.compassReading
             self.__lastStepTime = sensorReading.currentTime
             self.__lastStepCounted = False
-        self.__curDirection = sensorReading.compassReading
