@@ -36,7 +36,7 @@ class AccessPoint:
             points = Cell.all('wlan0')
             for i in range(len(points)):
                 if points[i].ssid == "NUS":
-                    ap_info.append({ "bssid": points[i].address, "rssi": points[i].signal })
+                    ap_info.append({ "bssid": str(points[i].address).lower(), "rssi": points[i].signal })
 
         # Filter similar APs
         ap_info = self.filterRepeatingAccessPoints(ap_info)
