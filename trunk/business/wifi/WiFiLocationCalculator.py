@@ -9,7 +9,7 @@ class WiFiLocationCalculator:
         topThree = sorted(apInfo, key=lambda k: k['rssi'], reverse=True)[:3]
         topThreeFiltered = []
         for i in range(len(topThree)):
-            if int(topThree[i]['rssi']) > -60:
+            if int(topThree[i]['rssi']) > -70:
                 topThreeFiltered.append(topThree[i])
         return topThreeFiltered
 
