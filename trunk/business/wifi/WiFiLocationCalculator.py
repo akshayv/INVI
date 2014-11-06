@@ -12,7 +12,7 @@ class WiFiLocationCalculator:
         for i in range(len(topThree)):
             if int(topThree[i]['rssi']) > -60:
                 topThreeFiltered.append(topThree[i])
-        print "return computeTopThreeRSSI"
+        print topThreeFiltered
         return topThreeFiltered
 
     def computeDistanceFromRSSI(self, rssi):
@@ -21,7 +21,7 @@ class WiFiLocationCalculator:
         A = -20 # Received signal in dBm at 1 metre - need to calibrate this - setting it at -10 for now
         n = 3.5 # Path loss component - Ranges from 2.7 to 4.3
         distance = 10**((A - int(rssi))/(10*n))
-        print "return computeDistanceFromRSSI"
+        print distance
         return distance
 
     def computeLocation(self, coordList):
@@ -68,11 +68,11 @@ class WiFiLocationCalculator:
                     ret = a
             except TypeError:
                 pass
-            print "return computeLocation"
+            print ret
             return ret
         else:
             ret = {x: (p1[x] + p2[x]) / 2, y: (p1[y] + p2[y]) / 2}
-            print "return computeLocation"
+            print ret
             return ret
 
 if __name__ == "__main__":

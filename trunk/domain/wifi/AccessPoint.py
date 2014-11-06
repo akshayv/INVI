@@ -18,7 +18,7 @@ class AccessPoint:
                         ap = ap1 if int(ap1['rssi']) < int(ap2['rssi']) else ap2
                         toBeRemoved.append(ap)
         ap_info = [x for x in ap_info if x not in toBeRemoved]
-        print "return filterRepeatingAccessPoints"
+        print ap_info
         return ap_info
 
     def getNearbyAccessPoints(self):
@@ -43,14 +43,14 @@ class AccessPoint:
 
         # Filter similar APs
         ap_info = self.filterRepeatingAccessPoints(ap_info)
-        print "return getNearbyAccessPoints"
+        print ap_info
         return ap_info
 
     def getMapAccessPoints(self, building, level):
         print "getMapAccessPoints"
         wifiJson = MapRetriever().retrieveData(building, level)
         accessPoints = wifiJson["wifi"]
-        print "return getMapAccessPoints"
+        print accessPoints
         return accessPoints
 
     def getCoordinate(self, building, level, nodeId):
@@ -62,17 +62,14 @@ class AccessPoint:
                 coordinate["nodeId"] = nodeId
                 coordinate["x"] = ap["x"]
                 coordinate["y"] = ap["y"]
-        print "return getCoordinate"
+        print coordinate
         return coordinate
 
     @staticmethod
     def checkIfBSSIDIsSame(bssid1, bssid2):
-        print "checkIfBSSIDIsSame"
         if bssid1[:-2] == bssid2[:-2]:
-            print "return checkIfBSSIDIsSame"
             return True
         else:
-            print "return checkIfBSSIDIsSame"
             return False
 
 
