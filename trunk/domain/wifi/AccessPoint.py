@@ -9,7 +9,6 @@ __author__ = 'raghav'
 class AccessPoint:
     def filterRepeatingAccessPoints(self, ap_info):
         """If Access Points are repeating, filter out the points with weaker signals"""
-        print "filterRepeatingAccessPoints"
         toBeRemoved = []
         for ap1 in ap_info:
             for ap2 in ap_info:
@@ -18,11 +17,9 @@ class AccessPoint:
                         ap = ap1 if int(ap1['rssi']) < int(ap2['rssi']) else ap2
                         toBeRemoved.append(ap)
         ap_info = [x for x in ap_info if x not in toBeRemoved]
-        print ap_info
         return ap_info
 
     def getNearbyAccessPoints(self):
-        print "getNearbyAccessPoints"
         ap_info = []
         if Platform.getOS() == "OS X":
             command = ['/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport', '-sNUS']
@@ -43,18 +40,15 @@ class AccessPoint:
 
         # Filter similar APs
         ap_info = self.filterRepeatingAccessPoints(ap_info)
-        print ap_info
         return ap_info
 
     def getMapAccessPoints(self, building, level):
         print "getMapAccessPoints"
         wifiJson = MapRetriever().retrieveData(building, level)
         accessPoints = wifiJson["wifi"]
-        print accessPoints
         return accessPoints
 
     def getCoordinate(self, building, level, nodeId):
-        print "getCoordinate"
         accessPoints = self.getMapAccessPoints(building, level)
         coordinate = {}
         for ap in accessPoints:
@@ -62,7 +56,6 @@ class AccessPoint:
                 coordinate["nodeId"] = nodeId
                 coordinate["x"] = ap["x"]
                 coordinate["y"] = ap["y"]
-        print coordinate
         return coordinate
 
     @staticmethod
@@ -76,6 +69,6 @@ class AccessPoint:
 if __name__ == "__main__":
     access_point = AccessPoint()
     print "getMapAccessPoints:", access_point.getMapAccessPoints("COM1", 2)
-    print "checkIfBSSIDIsSame:", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:DD:5E:AA:22:5B")
+    print "checkIfBSSIDIsSame:", access_point.checkIfBSSIDIsSame("1C:DD:5E:AA:22:5B", "1C:dd:5E:AA:22:5B")
     print "getNearbyAccessPoints:", access_point.getNearbyAccessPoints()
     print "filterRepeatingAccessPoints:", access_point.filterRepeatingAccessPoints(access_point.getNearbyAccessPoints())
