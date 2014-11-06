@@ -1,5 +1,6 @@
 from math import atan2, degrees
 import sys
+import time
 from business.deadreckoning.NorthAt import NorthAt
 from domain.graph.Point import Point
 from integration.earphones.EarphonesApi import EarphonesApi
@@ -86,9 +87,9 @@ class DirectionSpecifier(object):
 
             self.nextLocation = self.curLevelQueue[0]
             EarphonesApi.outputText(
-                "You are currently at " + str(curr.getName()) + ". Moving to " + str(self.nextLocation.getName()))
+                "Currently at " + str(curr.getName()) + ". Moving to " + str(self.nextLocation.getName()))
 
-        EarphonesApi.outputText("Move one step " + self.getNextDirection(curX, curY, curDir, NorthAt().getNorthAt()))
+        EarphonesApi.outputText(self.getNextDirection(curX, curY, curDir, NorthAt().getNorthAt()))
 
 
 if __name__ == "__main__":
