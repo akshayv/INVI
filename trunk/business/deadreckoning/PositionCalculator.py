@@ -62,7 +62,7 @@ class PositionCalculator(object):
             print "CurX: " + str(self.__curX)
             print "CurY: " + str(self.__curY)
             print "Stride Length: " + str(strideLength)
-            self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir)
+            self.__curX, self.__curY = self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir)
             self.__lastStepCounted = True
 
         if (self.__lastStepTime is None or (

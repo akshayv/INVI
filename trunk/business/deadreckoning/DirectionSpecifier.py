@@ -84,13 +84,15 @@ class DirectionSpecifier(object):
                 NorthAt().setNorthAt(temp["northAt"])
                 self.curLevelQueue = temp["graph"]
                 curr = self.curLevelQueue.pop(0)
+                curX = curr.getX()
+                curY = curr.getY()
 
             self.nextLocation = self.curLevelQueue[0]
             EarphonesApi.outputText(
                 "Currently at " + str(curr.getName()) + ". Moving to " + str(self.nextLocation.getName()))
 
         EarphonesApi.outputText(self.getNextDirection(curX, curY, curDir, NorthAt().getNorthAt()))
-
+        return curX, curY
 
 if __name__ == "__main__":
     locations = [{"graph":[Point.fromString("( nodeId = 26, x = 5220.0, y = 1600.0, name = Seminar Room 11 )"),
