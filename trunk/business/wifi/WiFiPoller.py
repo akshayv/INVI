@@ -19,7 +19,7 @@ class WiFiPoller:
             a, b = WiFiPoller.checkLocation()
             if type(a) == str:
                 # EarphonesApi.outputText(a)
-                continue
+                print a
 
             if not(x-700 <= a <= x+700 and y-700 <= b <= y+700):
                 print "Hang on while we recompute your location"
