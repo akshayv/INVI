@@ -22,7 +22,9 @@ class WiFiPoller:
                 print a
 
             if not(x-700 <= a <= x+700 and y-700 <= b <= y+700):
-                print "Hang on while we recompute your location"
+                EarphonesApi.outputText("You are the wrong location! Setting you to the right location now...")
+                positionCalculator.setX(a)
+                positionCalculator.setY(b)
             sleep(5)
 
     @staticmethod
