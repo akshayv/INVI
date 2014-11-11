@@ -44,6 +44,12 @@ class PositionCalculator(object):
     def getNorthAt(self):
         return self.__northAt.getNorthAt()
 
+    def setX(self, value):
+        self.__curX = value
+
+    def setY(self, value):
+        self.__curY = value
+
     #compassReading is the angle difference between North and current heading in degrees
     #currentTime is the time at which the reading was taken in millis
     def updatePosition(self, sensorReading):
