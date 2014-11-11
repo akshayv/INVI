@@ -34,13 +34,40 @@ class WiFiPoller:
 
         nearbyAP = access_point.getNearbyAccessPoints()
 
-        # For Week 11 demo
-        building = "1"
-        level = 2
-        mapAP = access_point.getMapAccessPoints(building, level)
+        building = None
+        level = None
+
+        # Obtain BSSID, Building, Level details of all maps
+        map_com1_level2 = access_point.getMapAccessPoints(1, 2)
+        map_com2_level3 = access_point.getMapAccessPoints(2, 3)
+        map_com2_level2 = access_point.getMapAccessPoints(2, 2)
+
+
+        # Check top AP with all the store access points in all levels of all buildings
+        maps = [map_com1_level2, map_com2_level3, map_com2_level2]
+        location = None
+        for ap in nearbyAP:
+            for map in maps:
+                for mapAP in map:
+                    if access_point.checkIfBSSIDIsSame(ap['bssid'], mapAP['bssid']):
+                        location = map
+
+
+        # Determine level and building
+        if location == map_com2_level2:
+            building = 2
+            level = 2
+        elif location == map_com2_level3:
+            building = 2
+            level = 3
+        elif location == map_com1_level2:
+            building = 1
+            level = 2
+
+
         filteredAP = []
         for nap in nearbyAP:
-            for map in mapAP:
+            for map in location:
                 if access_point.checkIfBSSIDIsSame(nap['bssid'], map['macAddr']):
                     nap["nodeName"] = map["nodeName"]
                     nap["bssid"] = map["macAddr"]
