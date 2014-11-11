@@ -1,6 +1,4 @@
-import time
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
-from domain.deadreckoning.AccelerometerReading import AccelerometerReading
 from domain.deadreckoning.SensorReading import SensorReading
 import serial
 
@@ -20,7 +18,10 @@ class SerialCommApi:
         while True:
             try:
                 inp = SerialCommApi.serial.readline()
-                SerialCommApi.onSerialMessage(SensorReading.fromString(inp))
+                rawReading = SensorReading.fromString(inp)
+                inp = SerialCommApi.serial.readline()
+                rawReading.currentTime = long(inp)
+                SerialCommApi.onSerialMessage(rawReading)
             except Exception:
                 print "ERROR DATA"
 

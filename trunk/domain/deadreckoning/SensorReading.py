@@ -20,8 +20,8 @@ class SensorReading:
         ay = float(array[1].replace("y = ", ""))
         az = float(array[2].replace("z = ", "").replace(")", ""))
         accelerometerReading = AccelerometerReading(ax, ay, az)
-        compass = float(array[3].replace("compassReading = ", ""))
-        time = long(array[4].replace("currentTime = ", "").replace(")", ""))
+        compass = float(array[3].replace("compassReading = ", "").replace(")", ""))
+        time = 0
         return SensorReading(accelerometerReading, compass, time)
 
     def __str__(self):
