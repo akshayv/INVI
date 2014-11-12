@@ -16,8 +16,6 @@ class PositionCalculator(object):
 
     __K_constant = 0.354
     __lastStepTime = None
-    __lastStepDir = None
-    __lastStepCounted = True
 
     directionSpecifier = DirectionSpecifier()
 
@@ -60,7 +58,7 @@ class PositionCalculator(object):
             sensorReading.currentTime - self.__lastStepTime) > 1000) and self.stepCounter.isStep(
                 sensorReading.accelerometerReading, sensorReading.currentTime) is True:
 
-            relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + self.__lastStepDir) % 360)) % 360)
+            relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + sensorReading.compassReading) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
             strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
@@ -69,5 +67,5 @@ class PositionCalculator(object):
             print "CurX: " + str(self.__curX)
             print "CurY: " + str(self.__curY)
             print "Stride Length: " + str(strideLength)
-            self.__curX, self.__curY = self.directionSpecifier.next(self.__curX, self.__curY, self.__lastStepDir)
+            self.__curX, self.__curY = self.directionSpecifier.next(self.__curX, self.__curY, sensorReading.compassReading)
             self.__lastStepCounted = True
