@@ -30,6 +30,6 @@ class GraphCache(object):
     def getGraph(self, building, level):
         key = building + "-L" + level
         if not key in GraphCache.__graphCache:
-            graph = GraphParser.parseGraph(MapRetriever.retrieveData(building, level))
+            graph = GraphParser.parseGraph(MapRetriever.retrieveData(building, level), building, level)
             GraphCache.__graphCache[key] = graph
         return GraphCache.__graphCache.get(building + "-L" + level)

@@ -5,12 +5,14 @@ class Point:
     __x = 0.0
     __y = 0.0
     __id = 0
+    __offset = 0.0
     __name = ""
 
-    def __init__(self, id, x=0.0, y=0.0, name=""):
+    def __init__(self, id, x=0.0, y=0.0, offset = 0.0, name=""):
         self.__x = x
         self.__y = y
         self.__id = id
+        self.__offset = offset
         self.__name = name
 
     def getX(self):
@@ -24,6 +26,9 @@ class Point:
 
     def getName(self):
         return self.__name
+
+    def getOffset(self):
+        return self.__offset
 
     def __str__(self):
         return "( nodeId = " + str(self.getId()) + ", x = " + str(self.getX()) + ", y = " + str(self.getY()) \
