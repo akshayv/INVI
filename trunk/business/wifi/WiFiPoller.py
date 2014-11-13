@@ -49,7 +49,7 @@ class WiFiPoller:
         for ap in nearbyAP:
             for map in maps:
                 for mapAP in map:
-                    if access_point.checkIfBSSIDIsSame(ap['bssid'], mapAP['bssid']):
+                    if access_point.checkIfBSSIDIsSame(ap['bssid'], mapAP['macAddr']):
                         location = map
 
 
