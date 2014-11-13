@@ -14,8 +14,7 @@ class GraphParser:
         graphJson = graphJson["map"]
         listGraph = ListGraph(len(graphJson), northAt)
         for point in graphJson:
-            if (building == "2" or building == "COM2") and level == 2 and str(point["nodeName"]).startswith(
-                    "P") and str(point["nodeName"]) is not "P17":
+            if (building == "2" or building == "COM2") and level == 2:
                 pointObject = Point(int(point["nodeId"]) - 1, float(point["x"]), float(point["y"]),
                                     point["nodeName"], 15.0)
             else:
@@ -25,8 +24,7 @@ class GraphParser:
                 modifiedLinkedPointId = int(linkedPointId) - 1
                 linkedPoint = graphJson[modifiedLinkedPointId]
 
-                if (building == "2" or building == "COM2") and level == 2 and str(linkedPointObject["nodeName"]).startswith(
-                        "P") and str(linkedPointObject["nodeName"]) is not "P17":
+                if (building == "2" or building == "COM2") and level == 2:
                     linkedPointObject = Point(modifiedLinkedPointId, float(linkedPoint["x"]), float(linkedPoint["y"]),
                                           linkedPoint["nodeName"], 15.0)
                 else:
