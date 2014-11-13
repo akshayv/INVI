@@ -17,7 +17,7 @@ class PositionCalculator(object):
     __northAt = None
     stepCounter = StepCounter()
     __instance = None
-
+    __strideLength = 58.0
     __K_constant = 0.354
     __lastStepTime = None
 
@@ -75,8 +75,9 @@ class PositionCalculator(object):
             relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + sensorReading.compassReading) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
-            strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
-            self.__curX += strideLength * cos(relativeTheta)
+            # strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
+            strideLength = self.__strideLength
+	    self.__curX += strideLength * cos(relativeTheta)
             self.__curY += strideLength * sin(relativeTheta)
             print "CurX: " + str(self.__curX)
             print "CurY: " + str(self.__curY)
