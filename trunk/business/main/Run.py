@@ -210,6 +210,7 @@ wifiThread.daemon = True
 wifiThread.start()
 
 integrationSerial.sendMessage('1')
+integrationSerial.sendMessage('1')
 
 getInitialDirection()
 
