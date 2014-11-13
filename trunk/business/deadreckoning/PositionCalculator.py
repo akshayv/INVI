@@ -71,8 +71,8 @@ class PositionCalculator(object):
         if (self.__lastStepTime is None or (
             sensorReading.currentTime - self.__lastStepTime) > 1000) and self.stepCounter.isStep(
                 sensorReading.accelerometerReading, sensorReading.currentTime) is True:
-
-            relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + sensorReading.compassReading) % 360)) % 360)
+            relativeTheta = radians((90 - ((self.__northAt.getNorthAt() + sensorReading.compassReading +
+                                            self.directionSpecifier.nextLocation.getOffset()) % 360)) % 360)
             lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
             # strideLength = ((lastPeak - lastValley) ** 0.25) * self.__K_constant * 100
