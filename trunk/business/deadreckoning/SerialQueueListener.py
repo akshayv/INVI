@@ -1,5 +1,7 @@
 from Queue import Queue
 from business.deadreckoning.PositionCalculator import PositionCalculator
+from domain.deadreckoning.SensorReading import SensorReading
+from domain.deadreckoning.StaircaseReading import StaircaseReading
 
 __author__ = 'akshay'
 
@@ -14,5 +16,8 @@ class SerialQueueListener:
     def listen():
         while True:
             message = SerialQueueListener.queue.get(True)
-            SerialQueueListener.positionCalculator.updatePosition(message)
+            if isinstance(message, SensorReading):
+                SerialQueueListener.positionCalculator.updatePosition(message)
+            elif isinstance(message, StaircaseReading):
+                SerialQueueListener.positionCalculator.updateStaircase(message)
             SerialQueueListener.queue.task_done()

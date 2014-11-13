@@ -1,6 +1,7 @@
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
 from domain.deadreckoning.SensorReading import SensorReading
 import serial
+from domain.deadreckoning.StaircaseReading import StaircaseReading
 
 __author__ = 'akshay'
 
@@ -18,10 +19,14 @@ class SerialCommApi:
         while True:
             try:
                 inp = SerialCommApi.serial.readline()
-                rawReading = SensorReading.fromString(inp)
-                inp = SerialCommApi.serial.readline()
-                rawReading.currentTime = long(inp)
-                SerialCommApi.onSerialMessage(rawReading)
+                if str(inp).__contains__("Staircase"):
+                    distance = float(SerialCommApi.serial.readline())
+                    SerialCommApi.onSerialMessage(StaircaseReading(distance))
+                else:
+                    rawReading = SensorReading.fromString(inp)
+                    inp = SerialCommApi.serial.readline()
+                    rawReading.currentTime = long(inp)
+                    SerialCommApi.onSerialMessage(rawReading)
             except Exception:
                 print "ERROR DATA"
 

@@ -1,8 +1,12 @@
 from math import cos, sin, radians
+import math
 from business.deadreckoning.DirectionSpecifier import DirectionSpecifier
 from business.deadreckoning.NorthAt import NorthAt
 from business.deadreckoning.StepCounter import StepCounter
 from domain.deadreckoning.SensorReading import SensorReading
+from integration.earphones.EarphonesApi import EarphonesApi
+from integration.keypad.KeyPadApi import KeyPadApi
+from integration.serial.SerialCommApi import SerialCommApi
 
 __author__ = 'akshay'
 
@@ -24,6 +28,16 @@ class PositionCalculator(object):
             cls.__instance = super(PositionCalculator, cls).__new__(
                 cls, *args, **kwargs)
         return cls.__instance
+
+    def updateStaircase(self, staircaseReading):
+        EarphonesApi.outputText(
+            "Staircase straight ahead in " + str(math.floor(staircaseReading.distance)) + " centimeters")
+        EarphonesApi.outputText("No instructions until after you are done climbing it")
+        KeyPadApi.getKey()
+        self.__curX = self.directionSpecifier.nextLocation.getX()
+        self.__curX = self.directionSpecifier.nextLocation.getY()
+        SerialCommApi.sendMessage('1')
+        self.directionSpecifier.next(self.__curX, self.__curY, 0)
 
     def __init__(self, curX=None, curY=None, northAt=None):
         if curX is not None:
