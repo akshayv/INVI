@@ -28,7 +28,7 @@ class GraphParser:
                 linkedPoint = graphJson[modifiedLinkedPointId]
 
                 offset = 0.0
-                if (building == "2" or building == "COM2") and level == (level == "2" or level == 2):
+                if (building == "2" or building == "COM2") and (level == "2" or level == 2):
                     offset = 15.0
                     if linkedPoint["nodeName"] == "P17" or linkedPoint["nodeName"] == "P2" or linkedPoint[
                         "nodeName"] == "P5" or linkedPoint["nodeName"] == "P19":
