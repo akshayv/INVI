@@ -34,7 +34,7 @@ class PositionCalculator(object):
         EarphonesApi.outputText("No instructions until after you are done climbing it")
         KeyPadApi.getKey()
         self.__curX = self.directionSpecifier.nextLocation.getX()
-        self.__curX = self.directionSpecifier.nextLocation.getY()
+        self.__curY = self.directionSpecifier.nextLocation.getY()
         SerialCommApi.sendMessage('1')
         self.directionSpecifier.next(self.__curX, self.__curY, 0)
 
