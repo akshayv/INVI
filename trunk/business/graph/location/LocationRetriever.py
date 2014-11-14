@@ -17,12 +17,11 @@ class LocationRetriever:
 
         confirmation = False
         while not confirmation:
-            EarphonesApi.outputText("Please specify building Name, level and node id")
             building, level, nodeId = KeyPadApi.getLocation()
-            EarphonesApi.outputText("You have input " + building + ", " + level + ", " + nodeId + ". Is this correct?")
+            EarphonesApi.outputText("You have input " + building + ", " + level + ", " + nodeId + ". Is this correct?", 200)
             confirmation = KeyPadApi.getConfirmation()
 
-        EarphonesApi.outputText("Retrieving graph now.")
+        EarphonesApi.outputText("Retrieving graph now.", 200)
         graphCache = GraphCache()
         floorGraph = graphCache.getGraph(building, level)
         if len(floorGraph.edges) == 0:
