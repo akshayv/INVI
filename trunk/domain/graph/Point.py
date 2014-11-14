@@ -2,18 +2,22 @@ __author__ = 'akshay'
 
 
 class Point:
+    __building = "1"
+    __level = "2"
     __x = 0.0
     __y = 0.0
     __id = 0
     __offset = 0.0
     __name = ""
 
-    def __init__(self, id, x=0.0, y=0.0, name="", offset = 0.0):
+    def __init__(self, id, x=0.0, y=0.0, name="", offset=0.0, building="1", level="2"):
         self.__x = x
         self.__y = y
         self.__id = id
         self.__offset = offset
         self.__name = name
+        self.__building = building
+        self.__level = level
 
     def getX(self):
         return self.__x
@@ -30,9 +34,16 @@ class Point:
     def getOffset(self):
         return self.__offset
 
+    def getBuilding(self):
+        return self.__building
+
+    def getLevel(self):
+        return self.__level
+
     def __str__(self):
         return "( nodeId = " + str(self.getId()) + ", x = " + str(self.getX()) + ", y = " + str(self.getY()) \
-               + ", name = " + str(self.getName()) + ", offset =  " + str(self.getOffset()) + ")"
+               + ", name = " + str(self.getName()) + ", offset =  " + str(self.getOffset()) + ", building = " + str(
+            self.getBuilding()) + ", level = " + str(self.getLevel()) + ")"
 
     def __repr__(self):
         return self.__str__()
