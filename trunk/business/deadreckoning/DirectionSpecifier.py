@@ -28,7 +28,7 @@ class DirectionSpecifier(object):
     weirdNodes = [{"id": "2-2-P17", "theta": 360.0}, {"id": "2-2-P2", "theta": 360.0}, {"id": "2-2-P5", "theta": 360.0},
                   {"id": "2-2-P19", "theta": 360.0}, {"id": "2-2-P6", "theta": 360.0},
                   {"id": "2-2-P1", "theta": 360.0}, {"id": "1-2-P22", "theta": 360.0}, {"id": "1-2-P39", "theta": 360.0},
-                  {"id": "1-2-P17", "theta": 360.0}, {"id": "1-2-P21", "theta": 360.0}]
+                  {"id": "1-2-P17", "theta": 360.0}, {"id": "1-2-P21", "theta": 360.0}, {"id": "1-2-P24", "theta": 360.0}]
 
     def getWeirdTheta(self, node):
         nodeString = str(node.getBuilding()) + "-" + str(node.getLevel()) + "-" + str(node.getName())
