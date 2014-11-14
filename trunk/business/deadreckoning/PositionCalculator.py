@@ -79,10 +79,10 @@ class PositionCalculator(object):
                 sensorReading.accelerometerReading, sensorReading.currentTime) is True:
 
             weirdTheta = self.getWeirdTheta(self.directionSpecifier.nextLocation)
+            valueToConsider = sensorReading.compassReading
             if weirdTheta != -99:
-                relativeTheta = radians(weirdTheta)
-            else:
-                relativeTheta = radians((90 - ((NorthAt().getNorthAt() + sensorReading.compassReading +
+                valueToConsider =  weirdTheta
+            relativeTheta = radians((90 - ((NorthAt().getNorthAt() + valueToConsider +
                                                 self.directionSpecifier.nextLocation.getOffset()) % 360)) % 360)
             # lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
             # step_lenth(in mts) = (Amax - Amin) ^ .25 * K
