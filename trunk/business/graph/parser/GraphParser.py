@@ -9,12 +9,12 @@ __author__ = 'akshay'
 class GraphParser:
 
     @staticmethod
-    def parseGraph(graphJson, building = "", level = 0):
+    def parseGraph(graphJson, building = "", level = 2):
         northAt = float(graphJson["info"]["northAt"])
         graphJson = graphJson["map"]
         listGraph = ListGraph(len(graphJson), northAt)
         for point in graphJson:
-            if (building == "2" or building == "COM2") and level == 2:
+            if (building == "2" or building == "COM2") and (level == "2" or level == 2):
                 pointObject = Point(int(point["nodeId"]) - 1, float(point["x"]), float(point["y"]),
                                     point["nodeName"], 15.0)
             else:
@@ -24,7 +24,7 @@ class GraphParser:
                 modifiedLinkedPointId = int(linkedPointId) - 1
                 linkedPoint = graphJson[modifiedLinkedPointId]
 
-                if (building == "2" or building == "COM2") and level == 2:
+                if (building == "2" or building == "COM2") and level == (level == "2" or level == 2):
                     linkedPointObject = Point(modifiedLinkedPointId, float(linkedPoint["x"]), float(linkedPoint["y"]),
                                           linkedPoint["nodeName"], 15.0)
                 else:
