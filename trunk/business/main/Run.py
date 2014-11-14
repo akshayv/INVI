@@ -163,9 +163,7 @@ def getShortestPathNodes(initialPosition, destination):
 
 # This is not really a good way to do things but it is a quick fix
 def getInitialDirection():
-    global compassVal, inp
     compassVal = None
-    NorthAt().setNorthAt(floorGraph.northAt)
     while compassVal is None:
         try:
             EarphonesApi.outputText("Trying to get compass direction")
@@ -193,7 +191,7 @@ shortestPathNodes = getShortestPathNodes(initialPosition, destination)
 floorGraph = GraphCache().getGraph(initialPosition.getBuilding(), initialPosition.getLevel())
 
 #initialize the singleton here
-positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY(), floorGraph.northAt)
+positionCalculator = PositionCalculator(initialPosition.getX(), initialPosition.getY())
 
 from business.deadreckoning.SerialQueueListener import SerialQueueListener
 
