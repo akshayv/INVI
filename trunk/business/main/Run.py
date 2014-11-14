@@ -177,9 +177,9 @@ def getInitialDirection():
 #This is where the execution begins
 
 #Check if internet access is available first.
-while not internet_on():
-    time.sleep(5)
-    EarphonesApi.outputText("No access to the network yet. Sleeping for 5 seconds.")
+# while not internet_on():
+#     time.sleep(5)
+#     EarphonesApi.outputText("No access to the network yet. Sleeping for 5 seconds.")
 
 initialMessage()
 performHandshake()
