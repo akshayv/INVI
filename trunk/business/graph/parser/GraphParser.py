@@ -15,8 +15,8 @@ class GraphParser:
         listGraph = ListGraph(len(graphJson), northAt)
         for point in graphJson:
             offset = 0.0
-            if (building == "2" or building == "COM2") and (level == "2" or level == 2):
-                offset = 15.0
+            #if (building == "2" or building == "COM2") and (level == "2" or level == 2):
+             #   offset = 15.0
             pointObject = Point(int(point["nodeId"]) - 1, float(point["x"]), float(point["y"]),
                                 point["nodeName"], offset, building, level)
             for linkedPointId in point["linkTo"].split(","):
@@ -25,8 +25,8 @@ class GraphParser:
                 linkedPoint = graphJson[modifiedLinkedPointId]
 
                 offset = 0.0
-                if (building == "2" or building == "COM2") and (level == "2" or level == 2):
-                    offset = 15.0
+                #if (building == "2" or building == "COM2") and (level == "2" or level == 2):
+                    #offset = 15.0
                 linkedPointObject = Point(modifiedLinkedPointId, float(linkedPoint["x"]), float(linkedPoint["y"]),
                                           linkedPoint["nodeName"], offset, building, level)
 
