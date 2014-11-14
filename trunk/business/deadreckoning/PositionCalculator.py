@@ -22,9 +22,9 @@ class PositionCalculator(object):
 
     directionSpecifier = DirectionSpecifier()
 
-    weirdNodes = [{"id": "2-2-P17", "theta": 190.0}, {"id": "2-2-P2", "theta": 190.0}, {"id": "2-2-P5", "theta": 190.0},
-                  {"id": "2-2-P19", "theta": 190.0}, {"id": "2-2-P6", "theta": 190.0},
-                  {"id": "2-2-P7", "theta": 190.0}, {"id": "1-2-P22", "theta": 135.0}, {"id": "1-2-P39", "theta": 135.0},
+    weirdNodes = [{"id": "2-2-P17", "theta": 190.0 - 15.0}, {"id": "2-2-P2", "theta": 190.0 - 15.0}, {"id": "2-2-P5", "theta": 190.0 - 15.0},
+                  {"id": "2-2-P19", "theta": 190.0 - 15.0}, {"id": "2-2-P6", "theta": 190.0 - 15.0},
+                  {"id": "2-2-P7", "theta": 190.0 - 15.0}, {"id": "1-2-P22", "theta": 135.0}, {"id": "1-2-P39", "theta": 135.0},
                   {"id": "1-2-P17", "theta": 135.0}, {"id": "1-2-P21", "theta": 135.0}]
 
     def getWeirdTheta(self, node):
