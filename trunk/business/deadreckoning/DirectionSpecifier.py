@@ -73,7 +73,7 @@ class DirectionSpecifier(object):
 
     def getNextDirection(self, curX, curY, curDir, northAt):
         delta = self.getNextHeading(curDir, curX, curY, northAt)
-        if 0 < delta <= 22 or 360 > delta > 338:
+        if 0 < delta <= 22 or 360 >= delta > 338:
             return DirectionSpecifier.UP
         elif 22 < delta <= 67:
             return DirectionSpecifier.STRAIGHT_RIGHT
