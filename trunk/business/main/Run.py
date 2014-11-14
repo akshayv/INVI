@@ -103,7 +103,7 @@ def getShortestPathNodes(initialPosition, destination):
                                           "northAt": floorGraph.northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
                     graphCache.getGraph(destination.getBuilding(), "2"), "TO 1-2-31",
-                    "TO 2-3-12"), "northAt": graphCache.getGraph(destination.getBuilding(), "2").northAt})
+                    "TO 2-3-11"), "northAt": graphCache.getGraph(destination.getBuilding(), "2").northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
                     graphCache.getGraph(destination.getBuilding(), "3"), "TO 2-2-16",
                     destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(), "3").northAt})
@@ -122,7 +122,7 @@ def getShortestPathNodes(initialPosition, destination):
             elif destination.getLevel() == "3":
                 shortestPathNodes.append({"graph":
                                               PathRetriever.getShortestPathNodes(floorGraph, initialPosition.getName(),
-                                                                                 "TO 2-3-12"),
+                                                                                 "TO 2-3-11"),
                                           "northAt": floorGraph.northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
                     graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO 2-2-16",
@@ -137,7 +137,7 @@ def getShortestPathNodes(initialPosition, destination):
                                                                                  "TO 2-2-16"),
                                           "northAt": floorGraph.northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
-                    graphCache.getGraph(initialPosition.getBuilding(), "2"), "TO 2-3-12",
+                    graphCache.getGraph(initialPosition.getBuilding(), "2"), "TO 2-3-11",
                     "TO 1-2-31"), "northAt": graphCache.getGraph(initialPosition.getBuilding(), "2").northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
                     graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO 2-2-1",
@@ -149,7 +149,7 @@ def getShortestPathNodes(initialPosition, destination):
                                                                                  "TO 2-2-16"),
                                           "northAt": floorGraph.northAt})
                 shortestPathNodes.append({"graph": PathRetriever.getShortestPathNodes(
-                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO 2-3-12",
+                    graphCache.getGraph(destination.getBuilding(), destination.getLevel()), "TO 2-3-11",
                     destination.getName()), "northAt": graphCache.getGraph(destination.getBuilding(),
                                                                            destination.getLevel()).northAt})
 
