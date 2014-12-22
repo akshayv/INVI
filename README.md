@@ -9,4 +9,4 @@ The main functions of this code include downloading and tracking the map, detect
 
 Data is fed into the RaspberryPi via Serial input.
 
-Run using trunk/business/main/Run.py
+Run using: sudo python trunk/business/main/Run.py
