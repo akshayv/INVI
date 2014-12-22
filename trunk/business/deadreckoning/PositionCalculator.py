@@ -22,23 +22,6 @@ class PositionCalculator(object):
 
     directionSpecifier = DirectionSpecifier()
 
-    weirdNodes = [{"id": "2-2-P17", "theta": 190.0}, {"id": "2-2-P2", "theta": 190.0}, {"id": "2-2-P5", "theta": 190.0},
-                  {"id": "2-2-P19", "theta": 190.0}, {"id": "2-2-P6", "theta": 190.0},
-                  {"id": "2-2-P7", "theta": 190.0}, {"id": "1-2-P22", "theta": 135.0}, {"id": "1-2-P39", "theta": 135.0},
-                  {"id": "1-2-P17", "theta": 135.0}, {"id": "1-2-P21", "theta": 135.0}, {"id": "1-2-P24", "theta": 135.0},
-
-
-                  {"id": "2-3-P14", "theta": 10.0}, {"id": "2-3-Mysterious Pt", "theta": 10.0},
-                  {"id": "2-3-P3", "theta": 190.0}, {"id": "2-3-P4", "theta": 190.0}, {"id": "2-3-P12", "theta": 190.0},
-                  ]
-
-    def getWeirdTheta(self, node):
-        nodeString = str(node.getBuilding()) + "-" + str(node.getLevel()) + "-" + str(node.getName())
-        for weirdNode in self.weirdNodes:
-            if weirdNode["id"] == nodeString:
-                return weirdNode["theta"]
-        return -99
-
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
             cls.__instance = super(PositionCalculator, cls).__new__(
@@ -83,10 +66,7 @@ class PositionCalculator(object):
                 sensorReading.currentTime - self.__lastStepTime) > 1000) and self.stepCounter.isStep(
                 sensorReading.accelerometerReading, sensorReading.currentTime) is True:
 
-            weirdTheta = self.getWeirdTheta(self.directionSpecifier.nextLocation)
             valueToConsider = sensorReading.compassReading
-            if weirdTheta != -99:
-                valueToConsider =  weirdTheta
             relativeTheta = radians((90 - ((NorthAt().getNorthAt() + valueToConsider +
                                                 self.directionSpecifier.nextLocation.getOffset()) % 360)) % 360)
             # lastPeak, lastValley = self.stepCounter.getAndClearPeakAndValley()
