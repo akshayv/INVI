@@ -23,25 +23,6 @@ class DirectionSpecifier(object):
     BACK_LEFT = "back-left"
     BACK_RIGHT = "back-right"
 
-
-
-    weirdNodes = [{"id": "2-2-P17", "theta": 360.0}, {"id": "2-2-P2", "theta": 360.0}, {"id": "2-2-P5", "theta": 360.0},
-                  {"id": "2-2-P19", "theta": 360.0}, {"id": "2-2-P6", "theta": 360.0},
-                  {"id": "2-2-P1", "theta": 360.0}, {"id": "1-2-P22", "theta": 360.0}, {"id": "1-2-P39", "theta": 360.0},
-                  {"id": "1-2-P17", "theta": 360.0}, {"id": "1-2-P21", "theta": 360.0}, {"id": "1-2-P24", "theta": 360.0},
-
-
-                {"id": "2-3-P14", "theta": 360.0}, {"id": "2-3-Mysterious Pt", "theta": 360.0},
-                  {"id": "2-3-P3", "theta": 360.0}, {"id": "2-3-P4", "theta": 360.0}, {"id": "2-3-P12", "theta": 360.0}
-                ]
-
-    def getWeirdTheta(self, node):
-        nodeString = str(node.getBuilding()) + "-" + str(node.getLevel()) + "-" + str(node.getName())
-        for weirdNode in self.weirdNodes:
-            if weirdNode["id"] == nodeString:
-                return weirdNode["theta"]
-        return -99
-
     __instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -67,11 +48,7 @@ class DirectionSpecifier(object):
         bearing = (90 - dirInAngle) % 360
         adjustedBearing = (bearing + 360 - northAt) % 360
 
-        weirdTheta = self.getWeirdTheta(self.nextLocation)
-        if weirdTheta != -99:
-            delta = weirdTheta
-        else:
-            delta = (adjustedBearing - curDir + self.nextLocation.getOffset()) % 360
+        delta = (adjustedBearing - curDir + self.nextLocation.getOffset()) % 360
         print "Cur Dir:" + str(curDir)
         print "Delta:" + str(delta)
         return delta
